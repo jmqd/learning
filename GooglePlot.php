@@ -8,7 +8,8 @@ class GooglePlot
     private $dataTable;
     private $codename;
     private $data;
-    private $chartType;
+    private $chartClass;
+    private $package;
 
     
     public function __construct($args)
@@ -21,6 +22,7 @@ class GooglePlot
         $this->data = $args['data'];
         $this->chartClass = $this->lookupChartClass();
         $this->package = $this->lookupPackage(); 
+        $this->makeJsDataTable();
     }
     
 
@@ -79,7 +81,12 @@ class GooglePlot
     }
 
 
-    public function getJsDataTable()
+    private function getDataTable()
+    {
+        return $this->dataTable;
+    }
+
+    public function makeJsDataTable()
     {
         $data_header = "['$this->independent'";
         foreach ($this->dependents as $dependent)
@@ -99,7 +106,7 @@ class GooglePlot
             }
             $data_body .= "],\n";
         }
-        return $data_header . $data_body;
+        $this->dataTable = $data_header . $data_body;
     }    
 
 
@@ -181,7 +188,7 @@ class GooglePlot
         function $this->codename() {
             var data = google.visualization.arrayToDataTable(
             [
-                {$this->getJsDataTable()}
+                {$this->getDataTable()}
             ]);
             {$this->getOptions()}
             var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
