@@ -8,23 +8,27 @@ class GooglePlot
     private $dataTable;
     private $codename;
     private $data;
+    private $chartType;
 
+    
     public function __construct($args)
     {
         $this->title = $args['title'];
-        $this->kind = $args['kind'];
+        $this->kind = strtolower($args['kind']);
         $this->dependents = $args['dependents'];
         $this->independent = $args['independent'];
         $this->codename = preg_replace('/[\s0-9]+/', '', $this->title) . substr(md5(rand()), 0, 7);
         $this->data = $args['data'];
+        $this->chartClass = $this->lookupChartClass();
+        $this->package = $this->lookupPackage(); 
     }
-
+    
 
     public function setIndependent($independent)
     {
         $this->independent = $independent;
         return $this;
-    }
+    } 
 
     public function setKind($kind)
     {
@@ -34,7 +38,7 @@ class GooglePlot
 
 
     public function getKind()
-    {
+    {   
         return $this->kind;
     }
 
@@ -68,9 +72,9 @@ class GooglePlot
             $value = "new Date('$value')";
             return $value;
         }
-        else
+        else 
         {
-            return $value;
+            return "'$value'";
         }
     }
 
@@ -96,7 +100,7 @@ class GooglePlot
             $data_body .= "],\n";
         }
         return $data_header . $data_body;
-    }
+    }    
 
 
     private function getSpecialOptions()
@@ -120,6 +124,20 @@ class GooglePlot
         };";
         return $options;
     }
+    
+
+    private function lookupPackage()
+    {
+        switch ($this->kind)
+        {
+            case 'table':
+                return 'table';
+                break;
+            default:
+                return 'corechart';
+                break;
+        }
+    }
 
 
     private function lookupChartClass()
@@ -130,7 +148,9 @@ class GooglePlot
             'combo' => 'ComboChart',
             'pie' => 'PieChart',
             'area' => 'AreaChart',
-            'stacked' => 'AreaChart'
+            'stacked' => 'AreaChart',
+            'bar' => 'BarChart',
+            'table' => 'Table',
             ];
         return $class_lookup[$this->kind];
     }
@@ -151,12 +171,12 @@ class GooglePlot
     }
 
 
-    public function plotJavascript()
+    public function getJavascript()
     {
         $js = "
         <div id='$this->codename' style='border: 0px solid; width:1400px;'></div>
         <script type='text/javascript'>
-        google.load('visualization', '1', {packages:['corechart']});
+        google.load('visualization', '1', {packages:['{$this->package}']});
         google.setOnLoadCallback($this->codename);
         function $this->codename() {
             var data = google.visualization.arrayToDataTable(
@@ -164,12 +184,11 @@ class GooglePlot
                 {$this->getJsDataTable()}
             ]);
             {$this->getOptions()}
-            var chart = new google.visualization.{$this->lookupChartClass()}(document.getElementById('$this->codename'));
+            var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
             chart.draw(data, options);
         }
         </script>";
         return $js;
     }
 }
-
 
