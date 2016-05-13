@@ -10,6 +10,8 @@ class GooglePlot
     private $data;
     private $chartClass;
     private $package;
+    private $isSharingAxes;
+    private $independentType;
 
     
     public function __construct($args)
@@ -17,18 +19,33 @@ class GooglePlot
         $this->title = $args['title'];
         $this->kind = strtolower($args['kind']);
         $this->dependents = $args['dependents'];
-        $this->independent = $args['independent'];
         $this->codename = preg_replace('/[\s0-9]+/', '', $this->title) . substr(md5(rand()), 0, 7);
         $this->data = $args['data'];
+        $this->setIndependent($args['independent']);
         $this->chartClass = $this->lookupChartClass();
         $this->package = $this->lookupPackage(); 
+        $this->isSharingAxes = True;
         $this->makeJsDataTable();
     }
     
 
     public function setIndependent($independent)
     {
-        $this->independent = $independent;
+        if (is_array($independent))
+        {
+            $this->independent = $independent['name'];
+            $this->independentType = $independent['type'];
+        }
+        else if (DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE)
+        {
+            $this->independent = $independent;
+            $this->independentType = 'datetime';
+        }
+        else
+        {
+            $this->independent = $independent;
+            $this->independentType = 'generic';
+        }
         return $this;
     } 
 
@@ -42,6 +59,11 @@ class GooglePlot
     public function getKind()
     {   
         return $this->kind;
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 
 
@@ -58,6 +80,11 @@ class GooglePlot
     }
 
 
+    public function getIndependentType()
+    {
+        return $this->independentType;
+    }
+
     public function addDependent($dependent)
     {
         $this->dependents[] = $dependent;
@@ -67,7 +94,7 @@ class GooglePlot
 
     private function independentlyDolledUp($value)
     {
-        if ($this->kind == 'timeseries')
+        if ($this->getIndependentType() == 'datetime')
         {
             $value = new DateTime($value);
             $value = $value->modify('+1 day')->format('Y-m-d');
@@ -85,6 +112,7 @@ class GooglePlot
     {
         return $this->dataTable;
     }
+
 
     public function makeJsDataTable()
     {
@@ -167,10 +195,21 @@ class GooglePlot
     {
         $axes = "vAxes: {\n";
         $series = "series: {\n";
-        foreach ($this->dependents as $index => $y)
+        if (!$this->isSharingAxes)
         {
-            $axes .= "$index: {title: '$y'},\n";
-            $series .= "$index:{ targetAxisIndex: $index},\n";
+            foreach ($this->dependents as $index => $y)
+            {
+                $axes .= "$index: {title: '$y'},\n";
+                $series .= "$index:{ targetAxisIndex: $index},\n";
+            }
+        }
+        else if ($this->isSharingAxes)
+        {
+            $axes .= "0: {title: ''},\n";
+            foreach ($this->dependents as $index => $y)
+            {
+                $series .= "$index:{ targetAxisIndex: 0},\n";
+            }
         }
         $axes .= "},\n";
         $series .= "}\n";
@@ -196,6 +235,11 @@ class GooglePlot
         }
         </script>";
         return $js;
+    }
+
+    public function display()
+    {
+        echo $this->getJavascript();
     }
 }
 
