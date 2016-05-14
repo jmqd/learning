@@ -19,7 +19,7 @@ class GooglePlot
         $this->title = $args['title'];
         $this->kind = strtolower($args['kind']);
         $this->dependents = $args['dependents'];
-        $this->codename = preg_replace('/[\s0-9]+/', '', $this->title) . substr(md5(rand()), 0, 7);
+        $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
         $this->data = $args['data'];
         $this->setIndependent($args['independent']);
         $this->chartClass = $this->lookupChartClass();
@@ -49,9 +49,22 @@ class GooglePlot
         return $this;
     } 
 
+
     public function setKind($kind)
     {
         $this->kind = $kind;
+        return $this;
+    }
+
+
+    public function setIsSharingAxes($boolean)
+    {
+        if (!is_bool($boolean))
+        {
+            $type = gettype($boolean);
+            throw new Exception ("setIsSharingAxes() of GooglePlot class requires type Boolean; $type was given.");
+        }
+        $this->isSharingAxes = $boolean;
         return $this;
     }
 
@@ -60,6 +73,7 @@ class GooglePlot
     {   
         return $this->kind;
     }
+
 
     public function getData()
     {
@@ -114,7 +128,7 @@ class GooglePlot
     }
 
 
-    public function makeJsDataTable()
+    private function makeJsDataTable()
     {
         $data_header = "['$this->independent'";
         foreach ($this->dependents as $dependent)
