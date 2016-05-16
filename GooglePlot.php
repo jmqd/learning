@@ -12,22 +12,57 @@ class GooglePlot
     private $package;
     private $isSharingAxes;
     private $independentType;
+    private $dataHeaders;
 
     
     public function __construct($args)
     {
         $this->title = $args['title'];
-        $this->kind = strtolower($args['kind']);
-        $this->dependents = $args['dependents'];
+        $this->kind = array_key_exists('kind', $args) ? strtolower($args['kind']) : 'line';
         $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
         $this->data = $args['data'];
+        $this->refreshDataHeaders();
+        $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
         $this->setIndependent($args['independent']);
+        $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
         $this->chartClass = $this->lookupChartClass();
         $this->package = $this->lookupPackage(); 
         $this->isSharingAxes = True;
         $this->makeJsDataTable();
     }
-    
+
+
+    private function refreshDataHeaders()
+    {
+        $this->dataHeaders = [];
+
+        foreach ($this->data[0] as $key => $value)
+        {
+            $this->dataHeaders[] = $key;
+            if ($key == 'date' && !isset($this->independent))
+            {
+                $this->independent = 'date';
+                $this->independentType = 'datetime';
+            }
+        }
+    }
+
+    public function getDataHeaders()
+    {
+        $this->refreshDataHeaders();
+        return $this->dataHeaders;
+    }
+
+
+    public function getIndependent()
+    {
+        return $this->independent;
+    }
+
+    private function buildDependentsGuess()
+    {   
+        return array_diff($this->getDataHeaders(), [$this->getIndependent()]);
+    }
 
     public function setIndependent($independent)
     {
@@ -36,9 +71,14 @@ class GooglePlot
             $this->independent = $independent['name'];
             $this->independentType = $independent['type'];
         }
-        else if (DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE)
+        else if (!empty($independent) && DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE)
         {
             $this->independent = $independent;
+            $this->independentType = 'datetime';
+        }
+        else if (in_array('date', $this->getDataHeaders()) && empty($independent))
+        {
+            $this->independent = 'date';
             $this->independentType = 'datetime';
         }
         else
@@ -193,6 +233,7 @@ class GooglePlot
     {
         $class_lookup = [
             'timeseries' => 'LineChart',
+            'line' => 'LineChart',
             'column' => 'ColumnChart',
             'combo' => 'ComboChart',
             'pie' => 'PieChart',
