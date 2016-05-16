@@ -7,6 +7,7 @@ class GooglePlot
     private $independent;
     private $dataTable;
     private $codename;
+    private $title;
     private $data;
     private $chartClass;
     private $package;
@@ -27,7 +28,7 @@ class GooglePlot
         $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
         $this->chartClass = $this->lookupChartClass();
         $this->package = $this->lookupPackage(); 
-        $this->isSharingAxes = True;
+        $this->isSharingAxes = array_key_exists('isSharingAxes', $args) ? $args['isSharingAxes'] : True;
         $this->makeJsDataTable();
     }
 
@@ -126,6 +127,18 @@ class GooglePlot
     }
 
 
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
     public function getDependents()
     {
         return $this->dependents;
@@ -182,6 +195,10 @@ class GooglePlot
             foreach ($this->dependents as $y)
             {
                 $value = $row->{$y};
+                if ($value == NULL)
+                {
+                    $value = 0;
+                }
                 $data_body .= ", $value";
             }
             $data_body .= "],\n";
@@ -198,6 +215,7 @@ class GooglePlot
             case 'stacked':
                 $special_options .= "isStacked: true\n";
         }
+        return $special_options;
     }
 
 
