@@ -39,13 +39,9 @@ class GooglePlot
         foreach ($this->data[0] as $key => $value)
         {
             $this->dataHeaders[] = $key;
-            if ($key == 'date' && !isset($this->independent))
-            {
-                $this->independent = 'date';
-                $this->independentType = 'datetime';
-            }
         }
     }
+
 
     public function getDataHeaders()
     {
@@ -59,10 +55,12 @@ class GooglePlot
         return $this->independent;
     }
 
+
     private function buildDependentsGuess()
     {   
         return array_diff($this->getDataHeaders(), [$this->getIndependent()]);
     }
+
 
     public function setIndependent($independent)
     {
@@ -291,6 +289,7 @@ class GooglePlot
         </script>";
         return $js;
     }
+
 
     public function display()
     {
