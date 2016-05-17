@@ -201,7 +201,7 @@ class GooglePlot
         }
         if ($this->independentType == 'datetime')
         {
-            $data_header .= ", { role: 'annotation' }";
+            $data_header .= ", { role: 'annotation' }, { role: 'annotationText' }";
         }
         $data_header .= "],\n";
         $data_body = "";
@@ -209,11 +209,13 @@ class GooglePlot
         {
             if ($this-> independentType == 'datetime' && array_key_exists($row->{$this->independent}, $this::$releases))
             {
-                $annotation = "'{$this::$releases[$row->{$this->independent}]}'";
+                $annotation = "'R'";
+                $annotation_text = "'{$this::$releases[$row->{$this->independent}]}'";
             }
             else
             {
                 $annotation = 'null';
+                $annotation_text = "null";
             }
             $x = $this->independentlyDolledUp($row->{$this->independent});
             $data_body .= "[$x";
@@ -229,6 +231,7 @@ class GooglePlot
             if ($this->independentType == 'datetime')
             {
                 $data_body .= ", $annotation";
+                $data_body .= ", $annotation_text";
             }
             $data_body .= "],\n";
         }
