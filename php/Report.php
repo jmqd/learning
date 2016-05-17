@@ -216,9 +216,9 @@ class Report
     {
         global $linkables;
         $linkables = [
-            'order_id' => 'https://secure.cardkingdom.com/admin/orders/view/',
-            'account_id' => 'https://secure.cardkingdom.com/admin/accounts/view/',
-            'product_id' => 'https://secure.cardkingdom.com/admin/products/browse?filter%5Bname%5D='
+            'order_id' => 'https://example.company.com/admin/orders/view/',
+            'account_id' => 'https://example.company.com/admin/accounts/view/',
+            'product_id' => 'https://example.company.com/admin/products/browse?filter%5Bname%5D='
             ];
 
         function link_it($column_name, $value, $is_new_tab)
