@@ -14,7 +14,20 @@ class GooglePlot
     private $isSharingAxes;
     private $independentType;
     private $dataHeaders;
+    
 
+    static $releases = [
+        '2014-02-07' => 'Born of the Gods',
+        '2014-05-02' => 'Journey into Nyx',
+        '2014-07-18' => '2015 Core Set',
+        '2014-09-26' => 'Khans of Tarkir',
+        '2015-01-23' => 'Fate Reforged',
+        '2015-03-27' => 'Dragons of Tarkir',
+        '2015-07-17' => 'Magic Origins',
+        '2015-10-02' => 'Battle for Zendikar',
+        '2016-01-22' => 'Oath of the Gatewatch',
+        '2016-04-08' => 'Shadows Over Innistrad' 
+        ];
     
     public function __construct($args)
     {
@@ -186,10 +199,22 @@ class GooglePlot
         {
             $data_header .= ", '$dependent'";
         }
+        if ($this->independentType == 'datetime')
+        {
+            $data_header .= ", { role: 'annotation' }";
+        }
         $data_header .= "],\n";
         $data_body = "";
         foreach ($this->data as $row)
         {
+            if ($this-> independentType == 'datetime' && array_key_exists($row->{$this->independent}, $this::$releases))
+            {
+                $annotation = "'{$this::$releases[$row->{$this->independent}]}'";
+            }
+            else
+            {
+                $annotation = 'null';
+            }
             $x = $this->independentlyDolledUp($row->{$this->independent});
             $data_body .= "[$x";
             foreach ($this->dependents as $y)
@@ -200,6 +225,10 @@ class GooglePlot
                     $value = 0;
                 }
                 $data_body .= ", $value";
+            }
+            if ($this->independentType == 'datetime')
+            {
+                $data_body .= ", $annotation";
             }
             $data_body .= "],\n";
         }
