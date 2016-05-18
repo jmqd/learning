@@ -15,31 +15,31 @@ class Report
 
     function __construct($data, $name)
     {
-        if (is_array($data))
-        {
-            foreach ($data as $row)
-            {
-                $data = json_decode(json_encode($data));
-            }
-        }
-
         $this->name = $name;
         $this->date = new DateTime();
         $this->data = $data;
+        $this->iPreferToBeObjectified();
         $this->refreshHeaders();
         $this->summary = False;
         $this->description = False;
     }
 
 
+    private function iPreferToBeObjectified()
+    {
+        if (! ($this->data[0] instanceof stdClass))
+        {
+            foreach ($this->data as $index => $row)
+            {
+                $this->data[$index] = json_decode(json_encode($row));
+            }
+        }       
+    }
+
     protected function refreshHeaders()
     {
-        $this->headers = [];
-
-        foreach ($this->data[0] as $key => $value)
-        {
-            $this->headers[] = $key;
-        }
+        $this->headers = array_keys(get_object_vars($this->data[0]));
+        return $this;
     }
 
 
@@ -183,7 +183,7 @@ class Report
     }
 
 
-    public function asCSV()
+    public function asCsv()
     {
         foreach ($this->data[0] as $key => $value)
         {
