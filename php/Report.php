@@ -1,13 +1,11 @@
 <?php
-// ................
 // Jordan McQueen
-// ................
 
 require_once('GooglePlot.php');
 
 class Report
 {
-    protected $data;
+    public $data;
     public $summary;
     public $name;
     public $date;
@@ -173,6 +171,7 @@ class Report
 
     public function display()
     {
+        $this->refreshHeaders();
         $html = "
             <h1>{$this->name}</h1>
             <h5><em>{$this->summary}</em></h5>
@@ -216,9 +215,9 @@ class Report
     {
         global $linkables;
         $linkables = [
-            'order_id' => 'https://example.company.com/admin/orders/view/',
-            'account_id' => 'https://example.company.com/admin/accounts/view/',
-            'product_id' => 'https://example.company.com/admin/products/browse?filter%5Bname%5D='
+            'order_id' => 'https://example.ecomm.com/admin/orders/view/',
+            'account_id' => 'https://example.ecomm.com/admin/accounts/view/',
+            'product_id' => 'https://example.ecomm.com/admin/products/browse?filter%5Bname%5D='
             ];
 
         function link_it($column_name, $value, $is_new_tab)
