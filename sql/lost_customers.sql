@@ -19,5 +19,4 @@ where
   and `accounts_active_week_of_six_months_ago`.type = 'sale' 
   and `accounts_active_week_of_six_months_ago`.status = 'completed'
   and `accounts_active_week_of_six_months_ago`.`is_pickup` = 0
-  and `accounts_active_week_of_six_months_ago`.account_id != 182520
   and `accounts_ordered_since`.account_id is null
