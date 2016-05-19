@@ -65,7 +65,7 @@ class Report
     public function setData($data)
     {
         $this->data = $data; 
-        $this->iPreferToBeObjectified();
+        $this->data = $this->iPreferToBeObjectified();
         $this->refreshHeaders();
         return $this;
 
