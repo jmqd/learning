@@ -17,6 +17,7 @@ class Report
 
     static $linkables = [
         'orderid' => 'https://example.ecomm.com/admin/orders/view/',
+        'poid' => 'https://example.ecomm.com/admin/purchase_orders/view/',
         'accountid' => 'https://example.ecomm.com/admin/accounts/view/',
         'productid' => 'https://example.ecomm.com/admin/products/browse?filter%5Bname%5D=',
         ];
@@ -125,7 +126,7 @@ class Report
     public function asHtmlTable()
     {
         if (! $this->hasResults) {
-            return "No results.";
+            return $this->silenceIsGolden();
         }
         $html = "<table class='table'>\n<thead>\n<tr>";
         foreach ($this->headers as $header)
@@ -172,15 +173,18 @@ class Report
 
     public function displayForEmail()
     {   
+        if ($this->hasResults == False)
+        {
+            return $this->silenceIsGolden('html');
+        }
+
         $html = "
             <h2>{$this->name}</h2>";
 
-        if ($this->summary)
-        {
+        if ($this->summary) {
             $html .= "<h5><br><em>{$this->summary}</em></h5>";
         }
-        if ($this->description)
-        {
+        if ($this->description) {
             $html .= "{$this->description}<br>";
         }
         $html .= "{$this->asEmailHtmlTable()}
@@ -229,8 +233,7 @@ class Report
     private function link_it($column_name, $value, $is_new_tab)
         {
             $extras = "";
-            if ($is_new_tab)
-            {
+            if ($is_new_tab) {
                 $extras = " target=\"_blank\"";
             }
 
@@ -239,11 +242,19 @@ class Report
         }
 
 
+    private function silenceIsGolden($how)
+    {
+        if ($how == 'html') {
+            return "<br>Nothing found for {$this->name}.";
+        } else {
+            return "";
+        }
+    }
 
     public function asHyperlinkedHtmlTable($is_new_tab=False)
     {
         if ($this->hasResults == False) {
-            return "No results.";
+            return $this->silenceIsGolden('html');
         }
         foreach ($this->data[0] as $key => $value)
         {
@@ -288,6 +299,11 @@ class Report
 
     public function plot($args=[])
     {
+        if ($this->hasResults == False)
+        {
+            return $this->silenceIsGolden('html');
+        }
+
         $args['title'] = array_key_exists('title', $args) ? $args['title'] : $this->name;
         $args['data'] = $this->data;
         $this->plot = new GooglePlot($args);
