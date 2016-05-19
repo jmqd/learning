@@ -12,6 +12,7 @@ class Report
     public $description;
     protected $headers;
     public $plot;
+    private $hasResults;
 
 
     static $linkables = [
