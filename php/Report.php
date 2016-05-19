@@ -13,6 +13,7 @@ class Report
     protected $headers;
     public $plot;
 
+
     static $linkables = [
         'orderid' => 'https://example.ecomm.com/admin/orders/view/',
         'accountid' => 'https://example.ecomm.com/admin/accounts/view/',
@@ -22,10 +23,15 @@ class Report
 
     function __construct($data, $name)
     {
-        $this->name = $name;
-        $this->date = new DateTime();
         $this->data = $data;
         $this->data = $this->iPreferToBeObjectified();
+        if ($this->data[0] == False) { 
+            $this->hasResults = False; 
+        } else { 
+            $this->hasResults = True; 
+        }
+        $this->name = $name;
+        $this->date = new DateTime();
         $this->refreshHeaders();
         $this->summary = False;
         $this->description = False;
@@ -51,7 +57,10 @@ class Report
 
     protected function refreshHeaders()
     {
-        $this->headers = array_keys(get_object_vars($this->data[0]));
+        if ($this->hasResults)
+        {
+            $this->headers = array_keys(get_object_vars($this->data[0]));
+        }
         return $this;
     }
 
@@ -65,7 +74,7 @@ class Report
     public function setData($data)
     {
         $this->data = $data; 
-        $this->data = $this->iPreferToBeObjectified();
+        $this->iPreferToBeObjectified();
         $this->refreshHeaders();
         return $this;
 
@@ -114,6 +123,9 @@ class Report
 
     public function asHtmlTable()
     {
+        if (! $this->hasResults) {
+            return "No results.";
+        }
         $html = "<table class='table'>\n<thead>\n<tr>";
         foreach ($this->headers as $header)
         {
@@ -122,12 +134,12 @@ class Report
         $html .= "</tr>\n</thead>\n<tbody>";
         foreach ($this->data as $row)
         {
-            $html .= "\n<tr>";
-            foreach ($this->headers as $column)
-            {
-                $html .= "\n<td>{$row->$column}</td>";
-            }
-            $html .= "\n</tr>";
+                $html .= "\n<tr>";
+                foreach ($this->headers as $column)
+                {
+                    $html .= "\n<td>{$row->$column}</td>";
+                }
+                $html .= "\n</tr>";
         }
         $html .= "\n</tbody>\n</table>";
         return $html;
@@ -229,6 +241,9 @@ class Report
 
     public function asHyperlinkedHtmlTable($is_new_tab=False)
     {
+        if ($this->hasResults == False) {
+            return "No results.";
+        }
         foreach ($this->data[0] as $key => $value)
         {
             $column_header_names[$key] = False;
