@@ -122,12 +122,12 @@ class Report
         $html .= "</tr>\n</thead>\n<tbody>";
         foreach ($this->data as $row)
         {
-                $html .= "\n<tr>";
-                foreach ($this->headers as $column)
-                {
-                    $html .= "\n<td>{$row->$column}</td>";
-                }
-                $html .= "\n</tr>";
+            $html .= "\n<tr>";
+            foreach ($this->headers as $column)
+            {
+                $html .= "\n<td>{$row->$column}</td>";
+            }
+            $html .= "\n</tr>";
         }
         $html .= "\n</tbody>\n</table>";
         return $html;
