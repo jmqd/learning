@@ -79,25 +79,24 @@ class GooglePlot
 
     public function setIndependent($independent)
     {
-        if (is_array($independent))
+        switch (True)
         {
-            $this->independent = $independent['name'];
-            $this->independentType = $independent['type'];
-        }
-        else if (!empty($independent) && DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE)
-        {
-            $this->independent = $independent;
-            $this->independentType = 'datetime';
-        }
-        else if (in_array('date', $this->getDataHeaders()) && empty($independent))
-        {
-            $this->independent = 'date';
-            $this->independentType = 'datetime';
-        }
-        else
-        {
-            $this->independent = $independent;
-            $this->independentType = 'generic';
+            case (is_array($independent)):
+                $this->independent = $independent['name'];
+                $this->independentType = $independent['type'];
+                break;
+            case (!empty($independent) && DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE):
+                $this->independent = $independent;
+                $this->independentType = 'datetime';
+                break;
+            case (in_array('date', $this->getDataHeaders()) && empty($independent)):
+                $this->independent = 'date';
+                $this->independentType = 'datetime';
+                break;
+            default:
+                $this->independent = $independent;
+                $this->independentType = 'generic';
+                break;
         }
         return $this;
     } 
@@ -208,7 +207,7 @@ class GooglePlot
         $data_body = "";
         foreach ($this->data as $row)
         {
-            if ($this-> independentType == 'datetime' && array_key_exists($row->{$this->independent}, $this::$releases))
+            if ($this->getIndependentType() == 'datetime' && array_key_exists($row->{$this->getIndependent()}, GooglePlot::$releases))
             {
                 $annotation = "'R'";
                 $annotation_text = "'{$this::$releases[$row->{$this->independent}]}'";
