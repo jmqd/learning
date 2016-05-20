@@ -16,7 +16,8 @@ class GooglePlot
     private $independentType;
     private $dataHeaders;
     
-
+    // this doesn't belong in the class file, obviously. Just for prototyping.
+    // does it make sense to have the class query the DB directly? hmm... 
     static $releases = [
         '2014-02-07' => 'Born of the Gods',
         '2014-05-02' => 'Journey into Nyx',
