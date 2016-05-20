@@ -88,15 +88,15 @@ class GooglePlot
                 break;
             case (!empty($independent) && DateTime::createFromFormat('Y-m-d', $this->getData()[0]->$independent) !== FALSE):
                 $this->independent = $independent;
-                $this->independentType = 'datetime';
+                $this->independentType = 'date';
                 break;
             case (in_array('date', $this->getDataHeaders()) && empty($independent)):
                 $this->independent = 'date';
-                $this->independentType = 'datetime';
+                $this->independentType = 'date';
                 break;
             default:
                 $this->independent = $independent;
-                $this->independentType = 'generic';
+                $this->independentType = 'string';
                 break;
         }
         return $this;
@@ -173,16 +173,20 @@ class GooglePlot
 
     private function independentlyDolledUp($value)
     {
-        if ($this->getIndependentType() == 'datetime')
+        switch ($this->getIndependentType())
         {
-            $value = new DateTime($value);
-            $value = $value->modify('+1 day')->format('Y-m-d');
-            $value = "new Date('$value')";
-            return $value;
-        }
-        else 
-        {
-            return "'$value'";
+            case 'date':
+                $value = new DateTime($value);
+                $value = $value->modify('+1 day')->format('Y-m-d');
+                $value = "new Date('$value')";
+                return $value;
+                break;
+            case 'number':
+                return $value;
+                break;
+            case 'string':
+                return "'$value'";
+                break;
         }
     }
 
@@ -195,20 +199,10 @@ class GooglePlot
 
     private function makeJsDataTable()
     {
-        $data_header = "['$this->independent'";
-        foreach ($this->dependents as $dependent)
-        {
-            $data_header .= ", '$dependent'";
-        }
-        if ($this->independentType == 'datetime')
-        {
-            $data_header .= ", { role: 'annotation' }, { role: 'annotationText' }";
-        }
-        $data_header .= "],\n";
         $data_body = "";
         foreach ($this->data as $row)
         {
-            if ($this->getIndependentType() == 'datetime' && array_key_exists($row->{$this->getIndependent()}, GooglePlot::$releases))
+            if ($this->getIndependentType() == 'date' && array_key_exists($row->{$this->getIndependent()}, GooglePlot::$releases))
             {
                 $annotation = "'R'";
                 $annotation_text = "'{$this::$releases[$row->{$this->independent}]}'";
@@ -229,14 +223,14 @@ class GooglePlot
                 }
                 $data_body .= ", $value";
             }
-            if ($this->independentType == 'datetime')
+            if ($this->independentType == 'date')
             {
                 $data_body .= ", $annotation";
                 $data_body .= ", $annotation_text";
             }
-            $data_body .= "],\n";
+            $data_body .= "],\n\t\t\t\t";
         }
-        $this->dataTable = $data_header . $data_body;
+        $this->dataTable = $data_body;
     }    
 
 
@@ -246,20 +240,53 @@ class GooglePlot
         switch ($this->kind)
         {
             case 'stacked':
-                $special_options .= "isStacked: true\n";
+                $special_options .= "isStacked: true,\n";
+            default:
+                $special_options .= "pointSize: {$this->getPointSize()}";
         }
         return $special_options;
+    }
+
+
+    public function setPointSizeOptions($size=Null)
+    {
+        if ($size != Null)
+        {
+            $this->pointSize = $size;
+            return $this;
+        }
+
+        switch ($this->kind)
+        {
+            case 'scatter':
+                $this->pointSize = 1;
+                break;
+            default:
+                $this->pointSize = 0;
+                break;
+        }
+        return $this;
+    }
+
+
+    public function getPointSize()
+    {
+        if (isset($this->pointSize) === False)
+        {
+            $this->setPointSizeOptions();
+        }
+        return $this->pointSize;
     }
 
 
     private function getOptions()
     {
         $options = "var options = {
-            title: '$this->title',
-            height: 400,
-            {$this->getAxesOptions()},
-            {$this->getSpecialOptions()}
-        };";
+                title: '$this->title',
+                height: 400,
+                {$this->getAxesOptions()},
+                {$this->getSpecialOptions()}
+            };";
         return $options;
     }
     
@@ -290,33 +317,53 @@ class GooglePlot
             'stacked' => 'AreaChart',
             'bar' => 'BarChart',
             'table' => 'Table',
+            'scatter' => 'ScatterChart',
             ];
         return $class_lookup[$this->kind];
+    }
+
+
+    private function buildColumns()
+    {
+        $columns = "";
+        $columns .= "data.addColumn('{$this->getIndependentType()}', '{$this->getIndependent()}');";
+        foreach ($this->getDependents() as $dependent)
+        {
+            $columns .= "\n\t\t\t";
+            $columns .= "data.addColumn('number', '$dependent');";
+        }
+        if ($this->independentType == 'date')
+        {
+            $columns .= " data.addColumn({type:'string', role:'annotation'});
+            data.addColumn({type:'string', role:'annotationText'});";
+        }
+
+        return $columns;
     }
 
 
     private function getAxesOptions()
     {
         $axes = "vAxes: {\n";
-        $series = "series: {\n";
-        if (!$this->isSharingAxes)
+        $series = "\t\t\t\tseries: {\n";
+        if ($this->isSharingAxes === False)
         {
             foreach ($this->dependents as $index => $y)
             {
-                $axes .= "$index: {title: '$y'},\n";
-                $series .= "$index:{ targetAxisIndex: $index},\n";
+                $axes .= "\t\t\t\t\t$index: {title: '$y'},\n";
+                $series .= "\t\t\t\t\t$index:{ targetAxisIndex: $index},\n";
             }
         }
-        else if ($this->isSharingAxes)
+        else if ($this->isSharingAxes === True)
         {
-            $axes .= "0: {title: ''},\n";
+            $axes .= "\t\t\t\t\t0: {title: ''},\n";
             foreach ($this->dependents as $index => $y)
             {
-                $series .= "$index:{ targetAxisIndex: 0},\n";
+                $series .= "\t\t\t\t\t$index:{ targetAxisIndex: 0},\n";
             }
         }
-        $axes .= "},\n";
-        $series .= "}\n";
+        $axes .= "\t\t\t\t" . "}," ."\n";
+        $series .= "\t\t\t\t" . "}";
         return $axes . $series;
     }
 
@@ -329,10 +376,13 @@ class GooglePlot
         google.load('visualization', '1', {packages:['{$this->package}']});
         google.setOnLoadCallback($this->codename);
         function $this->codename() {
-            var data = google.visualization.arrayToDataTable(
+            var data = new google.visualization.DataTable()
+            {$this->buildColumns()}
+            data.addRows(
             [
                 {$this->getDataTable()}
             ]);
+
             {$this->getOptions()}
             var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
             chart.draw(data, options);
