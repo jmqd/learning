@@ -112,8 +112,7 @@ class GooglePlot
 
     public function setIsSharingAxes($boolean)
     {
-        if (!is_bool($boolean))
-        {
+        if (!is_bool($boolean)) {
             $type = gettype($boolean);
             throw new Exception ("setIsSharingAxes() of GooglePlot class requires type Boolean; $type was given.");
         }
@@ -206,25 +205,22 @@ class GooglePlot
             {
                 $annotation = "'R'";
                 $annotation_text = "'{$this::$releases[$row->{$this->independent}]}'";
-            }
-            else
-            {
+            } else {
                 $annotation = 'null';
                 $annotation_text = "null";
             }
+
             $x = $this->independentlyDolledUp($row->{$this->independent});
             $data_body .= "[$x";
             foreach ($this->dependents as $y)
             {
                 $value = $row->{$y};
-                if ($value == NULL)
-                {
+                if ($value == NULL) {
                     $value = 0;
                 }
                 $data_body .= ", $value";
             }
-            if ($this->independentType == 'date')
-            {
+            if ($this->independentType == 'date') {
                 $data_body .= ", $annotation";
                 $data_body .= ", $annotation_text";
             }
@@ -250,8 +246,7 @@ class GooglePlot
 
     public function setPointSizeOptions($size=Null)
     {
-        if ($size != Null)
-        {
+        if ($size != Null) {
             $this->pointSize = $size;
             return $this;
         }
@@ -271,8 +266,7 @@ class GooglePlot
 
     public function getPointSize()
     {
-        if (isset($this->pointSize) === False)
-        {
+        if (isset($this->pointSize) === False) {
             $this->setPointSizeOptions();
         }
         return $this->pointSize;
@@ -332,8 +326,7 @@ class GooglePlot
             $columns .= "\n\t\t\t";
             $columns .= "data.addColumn('number', '$dependent');";
         }
-        if ($this->independentType == 'date')
-        {
+        if ($this->independentType == 'date') {
             $columns .= " data.addColumn({type:'string', role:'annotation'});
             data.addColumn({type:'string', role:'annotationText'});";
         }
@@ -346,16 +339,13 @@ class GooglePlot
     {
         $axes = "vAxes: {\n";
         $series = "\t\t\t\tseries: {\n";
-        if ($this->isSharingAxes === False)
-        {
+        if ($this->isSharingAxes === False) {
             foreach ($this->dependents as $index => $y)
             {
                 $axes .= "\t\t\t\t\t$index: {title: '$y'},\n";
                 $series .= "\t\t\t\t\t$index:{ targetAxisIndex: $index},\n";
             }
-        }
-        else if ($this->isSharingAxes === True)
-        {
+        } else if ($this->isSharingAxes === True) {
             $axes .= "\t\t\t\t\t0: {title: ''},\n";
             foreach ($this->dependents as $index => $y)
             {
