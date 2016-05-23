@@ -16,6 +16,7 @@ class GooglePlot
     private $independentType;
     private $dataHeaders;
     private $isControllable;
+    private $isIncludingPng;
     
     // this doesn't belong in the class file, obviously. Just for prototyping.
     // does it make sense to have the class query the DB directly? hmm... 
@@ -42,6 +43,7 @@ class GooglePlot
         $this->isControllable = array_key_exists('isControllable', $args) ? $args['isControllable'] : False;
         $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
         $this->setIndependent($args['independent']);
+        $this->isIncludingPng = array_key_exists('isIncludingPng', $args) ? $args['isIncludingPng'] : False;
         $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
         $this->chartClass = $this->lookupChartClass();
         $this->package = $this->lookupPackage(); 
@@ -392,6 +394,16 @@ class GooglePlot
     }
 
 
+    private function buildJsExtras()
+    {
+        if ($this->isIncludingPng === True) {
+            return "google.visualization.events.addListener(chart, 'ready', function () {
+                 png = chart.getImageURI();
+             });";
+        }
+    }
+
+
     private function buildJsForChart()
     {
         $js = "
@@ -409,6 +421,7 @@ class GooglePlot
 
             {$this->getOptions()}
             var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
+            {$this->buildJsExtras()}
             chart.draw(data, options);
         }
         </script>";
@@ -417,34 +430,38 @@ class GooglePlot
     }
 
     // TODO
-    // currently all of this is just the same as buildJsForChart().
-    // need to be built out to create a google.visualization.Dashboard
-    // and incorporate the ability to generate controls.
-    private function buildJsForDashboard()
+    // need to build out method to create a google.visualization.Dashboard object
+    //
+    // public function buildJsForDashboard()
+
+
+    public function juggleThePngForCron($where)
     {
-         $js = "
-        <div id='$this->codename' style='border: 0px solid; width:1400px;'></div>
-        <script type='text/javascript'>
-        google.load('visualization', '1', {packages:['{$this->package}']});
-        google.setOnLoadCallback($this->codename);
-        function $this->codename() {
-            var data = new google.visualization.DataTable()
-            {$this->buildColumns()}
-            data.addRows(
-            [
-                {$this->getDataTable()}
-            ]);
+        $js = "
+         <div id='$this->codename' style='border: 0px solid; width:1400px;'></div>
+         <script type='text/javascript'>
+         google.load('visualization', '1', {packages:['{$this->package}']});
+         google.setOnLoadCallback($this->codename);
+         function $this->codename() {
+             var data = new google.visualization.DataTable()
+             {$this->buildColumns()}
+             data.addRows(
+             [
+                 {$this->getDataTable()}
+             ]);
 
-            {$this->getOptions()}
-            var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
-            chart.draw(data, options);
-        }
-        </script>";
+             {$this->getOptions()}
+             var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
+             google.visualization.events.addListener(chart, 'ready', function () {
+                 png = chart.getImageURI();
+                 $.post('$where', {variable: png});
+             });
+             chart.draw(data, options);
+         }
+         </script>";
 
-        return $js;
-
+         return $js;
     }
-
 
     public function display()
     {
