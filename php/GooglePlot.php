@@ -15,6 +15,7 @@ class GooglePlot
     private $isSharingAxes;
     private $independentType;
     private $dataHeaders;
+    private $isControllable;
     
     // this doesn't belong in the class file, obviously. Just for prototyping.
     // does it make sense to have the class query the DB directly? hmm... 
@@ -38,6 +39,7 @@ class GooglePlot
         $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
         $this->data = $args['data'];
         $this->refreshDataHeaders();
+        $this->isControllable = array_key_exists('isControllable', $args) ? $args['isControllable'] : False;
         $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
         $this->setIndependent($args['independent']);
         $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
@@ -69,6 +71,23 @@ class GooglePlot
     public function getIndependent()
     {
         return $this->independent;
+    }
+
+
+    public function getIsControllable()
+    {
+        return $this->isControllable;
+    }
+
+
+    public function setIsControllable($boolean)
+    {
+        if (is_bool($boolean) === False) {
+            $type = gettype($boolean);
+            throw new Exception("setIsControllable of GooglePlot class requires boolean input. $type was given.");
+        }
+        $this->isControllable = $boolean;
+        return $this;
     }
 
 
@@ -162,6 +181,7 @@ class GooglePlot
     {
         return $this->independentType;
     }
+
 
     public function addDependent($dependent)
     {
@@ -360,6 +380,20 @@ class GooglePlot
 
     public function getJavascript()
     {
+        switch ($this->getIsControllable())
+        {
+            case True:
+                return $this->buildJsForDashboard();
+                break;
+            case False:
+                return $this->buildJsForChart();
+                break;
+        }
+    }
+
+
+    private function buildJsForChart()
+    {
         $js = "
         <div id='$this->codename' style='border: 0px solid; width:1400px;'></div>
         <script type='text/javascript'>
@@ -378,7 +412,37 @@ class GooglePlot
             chart.draw(data, options);
         }
         </script>";
+
         return $js;
+    }
+
+    // TODO
+    // currently all of this is just the same as buildJsForChart().
+    // need to be built out to create a google.visualization.Dashboard
+    // and incorporate the ability to generate controls.
+    private function buildJsForDashboard()
+    {
+         $js = "
+        <div id='$this->codename' style='border: 0px solid; width:1400px;'></div>
+        <script type='text/javascript'>
+        google.load('visualization', '1', {packages:['{$this->package}']});
+        google.setOnLoadCallback($this->codename);
+        function $this->codename() {
+            var data = new google.visualization.DataTable()
+            {$this->buildColumns()}
+            data.addRows(
+            [
+                {$this->getDataTable()}
+            ]);
+
+            {$this->getOptions()}
+            var chart = new google.visualization.{$this->chartClass}(document.getElementById('$this->codename'));
+            chart.draw(data, options);
+        }
+        </script>";
+
+        return $js;
+
     }
 
 
