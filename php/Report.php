@@ -16,10 +16,10 @@ class Report
 
 
     static $linkables = [
-        'orderid' => 'https://secure.cardkingdom.com/admin/orders/view/',
-        'poid' => 'https://secure.cardkingdom.com/admin/purchase_orders/view/',
-        'accountid' => 'https://secure.cardkingdom.com/admin/accounts/view/',
-        'productid' => 'https://secure.cardkingdom.com/admin/products/browse?filter%5Bname%5D=',
+        'orderid' => 'https://example.ecomm.com/admin/orders/view/',
+        'poid' => 'https://example.ecomm.com/admin/purchase_orders/view/',
+        'accountid' => 'https://example.ecomm.com/admin/accounts/view/',
+        'productid' => 'https://example.ecomm.com/admin/products/browse?filter%5Bname%5D=',
         ];
 
 
