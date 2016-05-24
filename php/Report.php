@@ -16,27 +16,36 @@ class Report
 
 
     static $linkables = [
-        'orderid' => 'https://example.ecomm.com/admin/orders/view/',
-        'poid' => 'https://example.ecomm.com/admin/purchase_orders/view/',
-        'accountid' => 'https://example.ecomm.com/admin/accounts/view/',
-        'productid' => 'https://example.ecomm.com/admin/products/browse?filter%5Bname%5D=',
+        'orderid' => 'https://secure.cardkingdom.com/admin/orders/view/',
+        'poid' => 'https://secure.cardkingdom.com/admin/purchase_orders/view/',
+        'accountid' => 'https://secure.cardkingdom.com/admin/accounts/view/',
+        'productid' => 'https://secure.cardkingdom.com/admin/products/browse?filter%5Bname%5D=',
         ];
 
 
     function __construct($data, $name)
     {
-        $this->data = $data;
-        $this->data = $this->iPreferToBeObjectified();
-        if ($this->data[0] == False) { 
-            $this->hasResults = False; 
-        } else { 
-            $this->hasResults = True; 
+        if ($data != Null)
+        {
+            $this->data = $data;
+            if ($this->data[0] == False) { 
+                $this->hasResults = False; 
+            } else { 
+                $this->hasResults = True; 
+            }
         }
+        if ($data == Null)
+        {
+            $this->data[0]['results'] = "Nothing found for $name.";
+            $this->hasResults = False;
+        }
+        $this->data = $this->iPreferToBeObjectified();
         $this->name = $name;
         $this->date = new DateTime();
         $this->refreshHeaders();
         $this->summary = False;
         $this->description = False;
+    
     }
 
 
@@ -125,8 +134,8 @@ class Report
 
     public function asHtmlTable()
     {
-        if (! $this->hasResults) {
-            return $this->silenceIsGolden();
+        if ($this->hasResults === False) {
+            return "<br>No results found for {$this->name}.";
         }
         $html = "<table class='table'>\n<thead>\n<tr>";
         foreach ($this->headers as $header)
@@ -146,6 +155,7 @@ class Report
         $html .= "\n</tbody>\n</table>";
         return $html;
     }
+
 
 
     public function asEmailHtmlTable()
@@ -175,7 +185,7 @@ class Report
     {   
         if ($this->hasResults == False)
         {
-            return $this->silenceIsGolden('html');
+            return "<br>Nothing found for {$this->name}.";
         }
 
         $html = "
@@ -242,19 +252,10 @@ class Report
         }
 
 
-    private function silenceIsGolden($how)
-    {
-        if ($how == 'html') {
-            return "<br>Nothing found for {$this->name}.";
-        } else {
-            return "";
-        }
-    }
-
     public function asHyperlinkedHtmlTable($is_new_tab=False)
     {
         if ($this->hasResults == False) {
-            return $this->silenceIsGolden('html');
+            return "<br>Nothing found for {$this->name}.";
         }
         foreach ($this->data[0] as $key => $value)
         {
@@ -299,11 +300,7 @@ class Report
 
     public function plot($args=[])
     {
-        if ($this->hasResults == False)
-        {
-            return $this->silenceIsGolden('html');
-        }
-
+        $args['hasResults'] = $this->hasResults;
         $args['title'] = array_key_exists('title', $args) ? $args['title'] : $this->name;
         $args['data'] = $this->data;
         $this->plot = new GooglePlot($args);

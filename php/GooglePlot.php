@@ -17,6 +17,7 @@ class GooglePlot
     private $dataHeaders;
     private $isControllable;
     private $isIncludingPng;
+    private $hasResults;
     
     // this doesn't belong in the class file, obviously. Just for prototyping.
     // does it make sense to have the class query the DB directly? hmm... 
@@ -36,19 +37,23 @@ class GooglePlot
     public function __construct($args)
     {
         $this->title = $args['title'];
-        $this->kind = array_key_exists('kind', $args) ? strtolower($args['kind']) : 'line';
-        $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
-        $this->data = $args['data'];
-        $this->refreshDataHeaders();
-        $this->isControllable = array_key_exists('isControllable', $args) ? $args['isControllable'] : False;
-        $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
-        $this->setIndependent($args['independent']);
-        $this->isIncludingPng = array_key_exists('isIncludingPng', $args) ? $args['isIncludingPng'] : False;
-        $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
-        $this->chartClass = $this->lookupChartClass();
-        $this->package = $this->lookupPackage(); 
-        $this->isSharingAxes = array_key_exists('isSharingAxes', $args) ? $args['isSharingAxes'] : True;
-        $this->makeJsDataTable();
+        $this->hasResults = array_key_exists('hasResults', $args) ? $args['hasResults'] : True;
+        if ($this->hasResults === True)
+        {
+            $this->kind = array_key_exists('kind', $args) ? strtolower($args['kind']) : 'line';
+            $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
+            $this->data = $args['data'];
+            $this->refreshDataHeaders();
+            $this->isControllable = array_key_exists('isControllable', $args) ? $args['isControllable'] : False;
+            $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
+            $this->setIndependent($args['independent']);
+            $this->isIncludingPng = array_key_exists('isIncludingPng', $args) ? $args['isIncludingPng'] : False;
+            $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
+            $this->chartClass = $this->lookupChartClass();
+            $this->package = $this->lookupPackage(); 
+            $this->isSharingAxes = array_key_exists('isSharingAxes', $args) ? $args['isSharingAxes'] : True;
+            $this->makeJsDataTable();
+        }
     }
 
 
@@ -98,6 +103,12 @@ class GooglePlot
         return array_diff($this->getDataHeaders(), [$this->getIndependent()]);
     }
 
+
+    public function withPng()
+    {
+        $this->isIncludingPng = True;
+        return $this;
+    }
 
     public function setIndependent($independent)
     {
@@ -465,6 +476,10 @@ class GooglePlot
 
     public function display()
     {
+        if ($this->hasResults === False) {
+            echo "No data found to plot with for $this->title.";
+            return Null;
+        }
         echo $this->getJavascript();
     }
 }

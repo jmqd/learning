@@ -1,20 +1,18 @@
 <?php
-// ................
 // Jordan McQueen
-// ................
 
 require_once('Report.php');
 
 class Dashboard
 {
-    protected $reports;
+    private $reports;
     public $summary;
     public $name;
     public $date;
     public $description;
-    public $url;
-    protected $message;
-    public $headers;
+    private $url;
+    public $message;
+    private $headers;
 
     function __construct($name)
     {   
@@ -37,14 +35,12 @@ class Dashboard
 
     public function addReport($reports)
     {
-        if (!is_array($reports))
-        {
+        if (!is_array($reports)) {
             $reports = [$reports];
         }
         foreach ($reports as $report)
         {
-            if (! $report instanceof Report)
-            {
+            if (! $report instanceof Report) {
                 $type = gettype($report);
                 throw new Exception("addReport() of Dashboard class requires object of type Report. $type was given.");
             }
@@ -69,8 +65,7 @@ class Dashboard
 
     public function getReport($name)
     {
-        if (! isset($this->reports[$name]))
-        {
+        if (! isset($this->reports[$name])) {
             throw new Exception("Report named \"$name\" does not exist.");
         }
         return $this->reports[$name];
@@ -139,12 +134,10 @@ class Dashboard
     public function displayForEmail()
     {
         $html = "<h1><u>{$this->name}</u></h1>";
-        if ($this->summary)
-        {
+        if ($this->summary) {
             $html .= "<h5><em>{$this->summary}</em></h5>";
         }
-        if ($this->description)
-        {
+        if ($this->description) {
             $html .= "{$this->description}";
         }
         foreach ($this->reports as $report)
@@ -155,8 +148,8 @@ class Dashboard
         return $html;
     }
 
-
-    public function asSwiftEmail()
+    
+    private function buildSwiftEmail()
     {
         $subject = $this->name . " -- " . $this->date->format('Y-m-d');
         $this->message = new Swift_Message($subject);
@@ -166,6 +159,12 @@ class Dashboard
         $body .= $footer;
         $body = new Swift_Message_Part($body, "text/html");
         $this->message->attach($body);
+    }
+
+
+    public function asSwiftEmail()
+    {
+        $this->buildSwiftEmail();
         return $this->message;
     }
 
