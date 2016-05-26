@@ -27,3 +27,4 @@ where
   and o.status = "completed"
   and year(o.ship_date) = year(curdate())) `tbl_1` 
 group by country_code) as `tbl_2`
+order by `losses_averaged_per_parcel` desc
