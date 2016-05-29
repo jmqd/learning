@@ -2,8 +2,7 @@
 using std::cout;
 using std::endl;
 
-int main()
-{
+int main() {
     int latest, tmp, sum, middle, low;
     tmp = 0;
     low = 0;
@@ -11,18 +10,15 @@ int main()
     latest = 1;
     sum = latest;
 
-    while (true)
-    {
+    while (true) {
         tmp = latest;
         latest += middle;
         low = middle;
         middle = tmp;
-        if (latest > 4000000)
-        {
+        if (latest > 4000000) {
             break;
         }
-        if (latest & 1) // if the term is even...
-        {
+        if (latest & 1) {
             sum += latest;
         }
     }
