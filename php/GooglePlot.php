@@ -1,6 +1,12 @@
 <?php
 // Jordan McQueen
 
+// TODO at this point, I'm beginning to believe that each kind of plot requires its own class.
+// e.g. new GooglePlot(['kind' => 'pie']) might have to call new GooglePlotPie() or something
+// of the sort. This is a longer-term design issue, though, and is probably best left on the 
+// backburner for now -- as it is, nothing is readily observed as broken.
+//
+
 class GooglePlot
 {
     private $kind;
@@ -18,6 +24,8 @@ class GooglePlot
     private $isControllable;
     private $isIncludingPng;
     private $hasResults;
+    private $linkedReport;
+
     
     // this doesn't belong in the class file, obviously. Just for prototyping.
     // does it make sense to have the class query the DB directly? hmm... 
@@ -43,11 +51,13 @@ class GooglePlot
             $this->kind = array_key_exists('kind', $args) ? strtolower($args['kind']) : 'line';
             $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->title) . substr(md5(rand()), 0, 7);
             $this->data = $args['data'];
+            $this->dataTransformer();
             $this->refreshDataHeaders();
             $this->isControllable = array_key_exists('isControllable', $args) ? $args['isControllable'] : False;
             $args['independent'] = array_key_exists('independent', $args) ? $args['independent'] : '';
             $this->setIndependent($args['independent']);
             $this->isIncludingPng = array_key_exists('isIncludingPng', $args) ? $args['isIncludingPng'] : False;
+            $this->linkedReport = array_key_exists('linkedReport', $args) ? $args['linkedReport'] : Null;
             $this->dependents = array_key_exists('dependents', $args) ? $args['dependents'] : $this->buildDependentsGuess();
             $this->chartClass = $this->lookupChartClass();
             $this->package = $this->lookupPackage(); 
@@ -229,6 +239,17 @@ class GooglePlot
     }
 
 
+    private function dataTransformer()
+    {
+        switch ($this->getKind())
+        {
+            case 'pie':
+                break;
+            default:
+                break;
+        }
+    }
+
     private function makeJsDataTable()
     {
         $data_body = "";
@@ -242,7 +263,7 @@ class GooglePlot
                 $annotation = 'null';
                 $annotation_text = "null";
             }
-
+            
             $x = $this->independentlyDolledUp($row->{$this->independent});
             $data_body .= "[$x";
             foreach ($this->dependents as $y)
