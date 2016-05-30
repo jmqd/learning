@@ -13,13 +13,13 @@ int main() {
     double divisor = 2;
 
     while (input > 1) {
-        while (fmod(input, divisor) == 0) {
-            factors.push_back(divisor);
-            input /= divisor;
+        while (fmod(input, divisor) == 0) { // if the divisor evenly divides the input value...
+            factors.push_back(divisor); // append the divisor to the list
+            input /= divisor; // set the input to the input / divisor. this is the crafty part.
         }
         ++divisor;
-        if (divisor*divisor > input) {
-            if (input  > 1) {
+        if (divisor*divisor > input) { // the largest prime factor of a number is the edge case
+            if (input  > 1) {          // where it is a perfect square, and its sqrt is prime
                 factors.push_back(input);
                 break;
             }
