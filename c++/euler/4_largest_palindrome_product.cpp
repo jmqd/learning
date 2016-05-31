@@ -9,15 +9,35 @@
 //       isPalindrome().
 // ....................................
 #include <iostream>
+#include <vector>
+#include <algorithm>
+
+using std::vector;
+using std::max_element;
 using std::cout;
+using std::endl;
 
 bool isPalindrome(int input);
 
 int main()
 {
-   int number = 100;
-   std::cout << isPalindrome(number);
-   return isPalindrome(number);
+    std::vector<int> palindromes; 
+    for (int i = 999; i > 500; --i)
+    {
+        bool check_next = true;
+        for (int j = 999; j > 500 && check_next; --i)
+        {
+            if (isPalindrome(j*i) && std::find(palindromes.begin(), palindromes.end(), j*i) == palindromes.end())
+            {
+                palindromes.push_back(j*i);              
+                check_next = false;
+            }
+        }
+    }
+
+    int answer = *std::max_element(palindromes.begin(), palindromes.end());
+    cout << answer;
+    return answer;
 }
 
 // ....................................................................................................................
@@ -27,11 +47,12 @@ int main()
 // ....................................................................................................................
 bool isPalindrome(int input) {
     int rev = 0;
-    while (input > 0) 
+    int num = input;
+    while (num > 0) 
     {
-        int dig = input % 10;
+        int dig = num % 10;
         rev = rev * 10 + dig;
-        input /= 10;
+        num /= 10;
     }
 
     if (input == rev)

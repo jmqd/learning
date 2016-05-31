@@ -9,7 +9,7 @@ using std::max_element;
 
 int main() {
     double input = 600851475143; // the initial number for which we check its greatest prime factor
-    std::vector <double> factors; // initialize the vector factors, which has elements of doubles
+    std::vector<double> factors; // initialize the vector factors, which has elements of doubles
     double divisor = 2;
 
     while (input > 1) {
