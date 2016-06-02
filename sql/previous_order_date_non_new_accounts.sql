@@ -1,6 +1,5 @@
 select
-  o.account_id,
-  `previous`.`order_date`
+  datediff(o.order_date, `previous`.`order_date`) as `days`
 from
   orders o
   inner join accounts ac on o.`account_id` = ac.id
@@ -12,7 +11,7 @@ where
   o.status = 'completed'
   and o.`type` = 'sale'
   and o.`is_pickup` = 0
-  and o.`order_date` > curdate() - interval 2 day
+  and o.`order_date` > curdate() - interval 30 day
   and o.`email` <> 'transfer@cardkingdom.com'
   and o.account_id != 0
   and `previous`.`order_date` = (
