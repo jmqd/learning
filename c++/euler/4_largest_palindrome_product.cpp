@@ -22,14 +22,15 @@ bool isPalindrome(int input);
 int main()
 {
     std::vector<int> palindromes; 
-    for (int i = 999; i > 500; --i)
+    for (int outer = 999; outer > 500; --outer)
     {
         bool check_next = true;
-        for (int j = 999; j > 500 && check_next; --i)
+        for (int inner = 999; inner > 500 && check_next; --inner)
         {
-            if (isPalindrome(j*i) && std::find(palindromes.begin(), palindromes.end(), j*i) == palindromes.end())
+            int product = inner * outer;
+            if (isPalindrome(product) && std::find(palindromes.begin(), palindromes.end(), product) == palindromes.end())
             {
-                palindromes.push_back(j*i);              
+                palindromes.push_back(product);              
                 check_next = false;
             }
         }
