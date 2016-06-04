@@ -1,13 +1,6 @@
-// ....................................
-// Not currently working. Just testing
-// isPalindrome() at the moment.
-//
-// TODO: 
-//   - fix isPalindrome() ?
-//   - find way to generate list of 
-//       numbers to iterate through
-//       isPalindrome().
-// ....................................
+// A palindromic number reads the same both ways. 
+// Find the largest palindrome made from the product of two 3-digit numbers.
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -28,7 +21,10 @@ int main()
         for (int inner = 999; inner > 500 && check_next; --inner)
         {
             int product = inner * outer;
-            if (isPalindrome(product) && std::find(palindromes.begin(), palindromes.end(), product) == palindromes.end())
+            if (isPalindrome(product) && 
+                std::find(palindromes.begin(), 
+                          palindromes.end(), 
+                          product) == palindromes.end())
             {
                 palindromes.push_back(product);              
                 check_next = false;
@@ -41,11 +37,6 @@ int main()
     return answer;
 }
 
-// ....................................................................................................................
-// I thought about casting to string and reversing, but I thought surely there ought to be a more elegant solution.
-// So I Googled... and came across this solution on stackexchange. Definitely seems more elegant to me.
-// http://stackoverflow.com/a/199218/5875532
-// ....................................................................................................................
 bool isPalindrome(int input) {
     int rev = 0;
     int num = input;
