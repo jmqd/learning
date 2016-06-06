@@ -55,7 +55,7 @@ std::vector<int> primeFactorization(int num)
     {
         while (num % divisor == 0)
         {
-			values.push_back(divisor);
+            values.push_back(divisor);
             num /= divisor;
         }
     }
