@@ -6,21 +6,22 @@ import shutil
 
 class Card:
     """ A magic card. """
-    slugRe = re.compile('[^a-zA-Z\-]')
-    adjacentHyphensRe = re.compile(r"([-]){2,}")
-    errors = [('edition', 'title', 'error')]
-    abbreviations = {
-        'Eternal Masters': 'ema/cards',
-        }
-
-
 
     def __init__(self, **kwargs):
+        #static setup, for now. this should be pushed to config file.
+        self.adjacent_hyphens_re = re.compile(r"([-]){2,}")
+        self.errors = []
+        self.abbreviations = {
+            'Eternal Masters': 'ema/cards',
+            }
+        self.slug_re = re.compile('[^a-zA-Z\-]')
+
+        #main instantiation; dynamic stuff -- for the most part.
         self.title = kwargs['title']
         self.edition = kwargs['edition'] if 'edition' in kwargs else 'Eternal Masters'
         self.variation = kwargs['variation'] if 'variation' in kwargs else ''
-        self.title_slug = self.get_slug(self.title)
-        self.edition_slug = self.get_slug(self.edition)
+        self.title_slug = self.get_slug('title')
+        self.edition_slug = self.get_slug('edition')
         self.save_location = "{}/{}.jpg".format(self.edition_slug, self.title_slug)
         self.directory = '/'.join(self.save_location.split('/')[0:-1])
         self.foreign_name_slug = self.get_foreign_name_slug()
@@ -32,13 +33,13 @@ class Card:
     def get_slug(self, attribute):
         slug = getattr(self, attribute).strip()
         slug = slug.replace(" ", "-").lower()
-        slug = slugRe.sub('', slug)
-        slug = adjacentHypensRe.sub("-", slug)
+        slug = self.slug_re.sub('', slug)
+        slug = self.adjacent_hyphens_re.sub("-", slug)
         return slug
 
 
     def get_foreign_edition_slug(self):
-        return abbreviations[self.edition]
+        return self.abbreviations[self.edition]
 
 
     def get_url(self):
@@ -52,7 +53,7 @@ class Card:
 
     def get_foreign_name_slug(self):
         """ At present, this procedure is explicitly for mythicspoilers.com """
-        foreign_slug = self.name_slug.replace('-', '')
+        foreign_slug = self.title_slug.replace('-', '')
         return foreign_slug
 
 
@@ -75,7 +76,7 @@ class Card:
                 response.close()
         except Exception as error:
             print("-- ", error)
-            errors.append((self.edition, self.title, self.url, error))
+            self.errors.append((self.edition, self.title, self.url, error))
         finally:
             try:
                 response.close()

@@ -1,8 +1,10 @@
 from Card import *
 import csv
 
-with open("input.csv", 'r') as missing_images:
-    reader = csv.reader(missing_images, delimiter = ',', quotechar = '"')
+errors = [('edition', 'title', 'error')]
+
+with open("input.csv", 'r') as images_to_download:
+    reader = csv.reader(images_to_download, delimiter = ',', quotechar = '"')
     reader.__next__()
     for row in reader:
         args = {
@@ -12,6 +14,7 @@ with open("input.csv", 'r') as missing_images:
             }
         card = Card(**args)
         card.download()
+        errors += card.errors
 for item in errors:
     print(item)
 
