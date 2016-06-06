@@ -1,5 +1,5 @@
 import os, re, argparse
-from shutil import copyfile
+from shutil import copy
 
 #argument parsing :::
 parser = argparse.ArgumentParser()
@@ -8,17 +8,29 @@ parser.add_argument("-s", "--source", type=str, default='old/')
 args = parser.parse_args()
 
 #regular expression object building :::
-regex = re.compile('[^a-zA-Z\-]') #looking at complement of any alphabetical character, or a hyphen
 
+#looking at complement of any alphabetical character, or a hyphen
+regex = re.compile('[^a-zA-Z\-]')
+
+#rename filename to url-friendly format :::
 def slug(string):
     string = string.strip()
-    string = string.replace(" ", "-").lower() #attention: data entry error might cause two spaces between words
+    #attention: data entry errors may cause two spaces between words
+    string = string.replace(" ", "-").lower()
     string = regex.sub('', string)
-    string = re.sub(r"([-]){2,}", "-", string) #solve for that here: remove case of two adjacent hyphens
+    #solve for double spaces here: replace n adjacent hyphens with one hyphen
+    string = re.sub(r"([-]){2,}", "-", string)
     return string
 
+
+#main routine
 for file in os.listdir(args.source):
+    if file.startswith("Swamp") or file.startswith("Plains") or
+            file.startswith("Mountain") or file.startswith("Island") or
+            file.startswith("Forest"):
+        continue
+
     if file.endswith(".jpg"):
         src = args.source + file
-        dest = args.destination + slug(os.path.splitext(file)[0]) + ".jpg" #splitext: splits name & ext
-        copyfile(src, dest)
+        dest = args.destination + slug(os.path.splitext(file)[0]) + ".jpg"
+        copy(src, dest)
