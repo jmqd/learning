@@ -1,11 +1,9 @@
 from Card import *
-import csv, pprint
+import csv, pprint, time
 from bs4 import BeautifulSoup
 
 errors = [('edition', 'title', 'error')]
 
-def is_magic_card_image(img):
-    return img and img.has_attr('alt')
 
 try:
     req = urllib.request.Request('http://magic.wizards.com/en/articles/archive/card-image-gallery/eternal-masters')
@@ -23,9 +21,16 @@ finally:
     except NameError:
         pass
 wotc = BeautifulSoup(wotc, 'html.parser')
-
-for image in wotc.find_all(img=is_magic_card_image):
-    print(image.get('alt'), image.get('src'))
+for image in wotc.find_all('img', alt=True):
+    if image.get('style') == 'width: 265px; height: 370px;':
+        print(image.get('src'))
+        dict_args = {
+            'title': image.get('alt'),
+            'edition': 'Eternal Masters',
+            'url': image.get('src'),
+            }
+        card = Card(**dict_args)
+        card.download()
 for item in errors:
     print(item)
 

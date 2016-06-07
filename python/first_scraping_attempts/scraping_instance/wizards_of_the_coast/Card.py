@@ -1,7 +1,5 @@
 import urllib.request
-import os
-import re
-import shutil
+import os, re, shutil, time
 
 
 class Card:
@@ -74,9 +72,11 @@ class Card:
                 shutil.copyfileobj(response, out_file)
                 print("++ ", self.save_location)
                 response.close()
+                time.sleep(5)
         except Exception as error:
             print("-- ", error)
             self.errors.append((self.edition, self.title, self.url, error))
+            time.sleep(5)
         finally:
             try:
                 response.close()
