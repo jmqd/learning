@@ -8,9 +8,9 @@ join
 on
   {model}s.id = tag_instances.taggable_id 
 where
-  tag_id in ({match_all_these_tags})
+  tag_id in ({tags_array_csv_string})
 group by
   {model}s.id
 having
-  count(*) = {count_of_match_all_these_tags}
+  count(*) = {tags_array_count_int}
 
