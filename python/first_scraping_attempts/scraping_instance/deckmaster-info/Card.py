@@ -72,7 +72,7 @@ class Card:
                 shutil.copyfileobj(response, out_file)
                 print("++ ", self.save_location)
                 response.close()
-                time.sleep(5)
+                time.sleep(2)
         except Exception as error:
             print("-- ", error)
             self.errors.append((self.edition, self.title, self.url, error))
