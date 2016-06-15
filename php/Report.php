@@ -141,7 +141,8 @@ class Report
         if ($this->hasResults === False) {
             return "<br>No results found for {$this->name}.";
         }
-        $html = "<table class='table'>\n<thead>\n<tr>";
+        $html = $this->comes_with_options('prework');
+        $html .= "<table class='table'>\n<thead>\n<tr>";
         foreach ($this->headers as $header)
         {
             $html .= "\n<th>$header</th>";
@@ -157,6 +158,7 @@ class Report
             $html .= "\n</tr>";
         }
         $html .= "\n</tbody>\n</table>";
+        $html .= $this->comes_with_options('postwork');
         return $html;
     }
 
@@ -293,8 +295,7 @@ class Report
                     }
                     // This must be a hyperlink
                     $(\"#button_{$this->codename}\").click(function (event) {
-                    // var outputFile = 'export'
-                    var outputFile = window.prompt(\"What do you want to name your output file (Note: This won't have any effect on Safari)\") || 'export';
+                    var outputFile = '{$this->name}'
                     outputFile = outputFile.replace('.csv','') + '.csv'
                  
                     // CSV
