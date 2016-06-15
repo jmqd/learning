@@ -1,8 +1,12 @@
+// By considering the terms in the Fibonacci sequence whose values 
+// do not exceed four million, find the sum of the even-valued terms.
+
 #include <iostream>
 using std::cout;
 using std::endl;
 
-int main() {
+int main() 
+{
     // initialize the fib sequence...
     int latest, tmp, sum, middle, low;
     tmp = 0;
@@ -11,15 +15,18 @@ int main() {
     latest = 1;
     sum = latest; // initialize the sum at 1. a bit hacky...
 
-    while (true) {
+    while (true) 
+    {
         tmp = latest;
         latest += middle;
         low = middle;
         middle = tmp;
-        if (latest > 4000000) {
+        if (latest > 4000000) 
+        {
             break;
         }
-        if (latest & 1) {
+        if (latest & 1) 
+        {
             sum += latest;
         }
     }
