@@ -13,9 +13,11 @@ class Report
     protected $headers;
     public $plot;
     private $hasResults;
-
-
-    static $linkables = [
+    private $options;
+    private $codename;
+    
+    private static $supported_options = ['export_csv'];
+    private static $linkables = [
         'orderid' => 'https://example.ecomm.com/admin/orders/view/',
         'poid' => 'https://example.ecomm.com/admin/purchase_orders/view/',
         'accountid' => 'https://example.ecomm.com/admin/accounts/view/',
@@ -39,6 +41,8 @@ class Report
             $this->data[0]['results'] = "Nothing found for $name.";
             $this->hasResults = False;
         }
+        $this->options = [];
+        $this->codename = preg_replace('/[\s0-9,\'"\)\(]+/', '', $this->name) . substr(md5(rand()), 0, 7);
         $this->data = $this->iPreferToBeObjectified();
         $this->name = $name;
         $this->date = new DateTime();
@@ -51,7 +55,7 @@ class Report
 
     private function iPreferToBeObjectified()
     {
-        if (! ($this->data instanceof Mysql_Result))
+        if (!($this->data instanceof Mysql_Result))
         {
             foreach ($this->data as $index => $row)
             {
@@ -137,7 +141,8 @@ class Report
         if ($this->hasResults === False) {
             return "<br>No results found for {$this->name}.";
         }
-        $html = "<table class='table'>\n<thead>\n<tr>";
+        $html = $this->comes_with_options('prework');
+        $html .= "<table class='table'>\n<thead>\n<tr>";
         foreach ($this->headers as $header)
         {
             $html .= "\n<th>$header</th>";
@@ -153,6 +158,7 @@ class Report
             $html .= "\n</tr>";
         }
         $html .= "\n</tbody>\n</table>";
+        $html .= $this->comes_with_options('postwork');
         return $html;
     }
 
@@ -217,6 +223,116 @@ class Report
     }
 
 
+    public function with($option)
+    {
+        $option = strtolower($option);
+        if (!in_array($option, Report::$supported_options))
+        {
+            echo "{$option} not in supported_options for Reports.";
+            return $this;
+        }
+        $this->options[] = $option;
+        return $this;
+    }
+
+
+    private function with_export_csv($mode)
+    {
+        switch ($mode)
+        {
+            case 'postwork':
+                // javascript shamelessly ripped from github.com/adilapapaya
+                // I'll happily tinker with my car, but I won't build the \
+                // rubber upon which it rolls.
+                $js = "
+                    <script type='text/javascript'>
+                    $(document).ready(function () {
+                    console.log('HELLO')
+                    function exportTableToCSV(\$table, filename) {
+                    var \$headers = \$table.find('tr:has(th)')
+                    ,\$rows = \$table.find('tr:has(td)')
+                    // Temporary delimiter characters unlikely to be typed by keyboard
+                    // This is to avoid accidentally splitting the actual contents
+                    ,tmpColDelim = String.fromCharCode(11) // vertical tab character
+                    ,tmpRowDelim = String.fromCharCode(0) // null character
+                    // actual delimiter characters for CSV format
+                    ,colDelim = '\",\"'
+                    ,rowDelim = '\"\\r\\n\"';
+                    // Grab text from table into CSV formatted string
+                    var csv = '\"';
+                    csv += formatRows(\$headers.map(grabRow));
+                    csv += rowDelim;
+                    csv += formatRows(\$rows.map(grabRow)) + '\"';
+                    // Data URI
+                    var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+                    $(this)
+                    .attr({
+                    'download': filename
+                        ,'href': csvData
+                        //,'target' : '_blank' //if you want it to open in a new window
+                    });
+                    function formatRows(rows){
+                    return rows.get().join(tmpRowDelim)
+                        .split(tmpRowDelim).join(rowDelim)
+                        .split(tmpColDelim).join(colDelim);
+                    }
+                    // Grab and format a row from the table
+                    function grabRow(i,row){
+                     
+                    var \$row = $(row);
+                    //for some reason \$cols = \$row.find('td') || \$row.find('th') won't work...
+                    var \$cols = \$row.find('td'); 
+                    if(!\$cols.length) \$cols = \$row.find('th');  
+                    return \$cols.map(grabCol)
+                                .get().join(tmpColDelim);
+                    }
+                    // Grab and format a column from the table 
+                    function grabCol(j,col){
+                    var \$col = $(col),
+                        \$text = \$col.text();
+                    return \$text.replace('\"', '\"\"'); // escape double quotes
+                    }
+                    }
+                    // This must be a hyperlink
+                    $(\"#button_{$this->codename}\").click(function (event) {
+                    var outputFile = '{$this->name}'
+                    outputFile = outputFile.replace('.csv','') + '.csv'
+                 
+                    // CSV
+                    exportTableToCSV.apply(this, [$('#table_{$this->codename}>table'), outputFile]);
+                
+                    // IF CSV, don't do event.preventDefault() or return false
+                    // We actually need this to be a typical hyperlink
+                    });
+                    });
+                    </script>";
+                return $js;
+                break;
+            case 'prework':
+                $button = "
+                    <div class='button'>
+                    <a href='#' id ='button_{$this->codename}' role='button'>Download this table as CSV
+                    </a>
+                    </div>
+                    <div id='table_{$this->codename}'>";
+                return $button;
+                break;
+        }
+    }
+
+
+    private function comes_with_options($mode)
+    {
+        $html = "";
+        foreach ($this->options as $option)
+        {
+            $function_name = "with_" . $option;
+            $html .= $this->{$function_name}($mode);
+        } 
+        return $html;
+    }
+
+
     public function asCsv()
     {
         if (!$fp = fopen('php://temp', 'w+')) // open the memory for csvwriter fputcsv() 
@@ -261,8 +377,10 @@ class Report
         {
             $column_header_names[$key] = False;
         }
-
-        $html = "<table class='table'>\n<thead>\n<tr>";
+        
+        $html = "";
+        $html .= $this->comes_with_options('prework');
+        $html .= "<table class='table'>\n<thead>\n<tr>";
 
         foreach ($column_header_names as $column_name => $is_linkable)
         {
@@ -294,6 +412,13 @@ class Report
             $html .= "</tr>";
         }
         $html .= "</tbody></table>";
+
+        if (in_array('export_csv', $this->options))
+        {
+            $html .= "</div>";
+        }
+
+        $html .= $this->comes_with_options('postwork');
         return $html;
     }
  
@@ -301,6 +426,7 @@ class Report
     public function plot($args=[])
     {
         $args['hasResults'] = $this->hasResults;
+        $args['linkedReport'] = $this;
         $args['title'] = array_key_exists('title', $args) ? $args['title'] : $this->name;
         $args['data'] = $this->data;
         $this->plot = new GooglePlot($args);
