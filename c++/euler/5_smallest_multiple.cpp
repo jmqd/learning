@@ -28,7 +28,13 @@ int main()
 
         for (auto kv : prime_factorization)
         {
-            int count = std::count_if(prime_factors.begin(), prime_factors.end(), [prime_factorization, kv](int i) {return i == prime_factorization.find(kv.first).first; });
+            int count = std::count_if(prime_factors.begin(), 
+                                      prime_factors.end(),
+                                      [prime_factorization, kv](int i) 
+            {
+                return i == prime_factorization.find(kv.first).first; 
+            }
+            );
             if (count > kv.second)
             {
                 prime_factorization[kv.first] = count;
