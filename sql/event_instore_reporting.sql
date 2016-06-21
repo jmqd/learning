@@ -4,12 +4,12 @@ select
   count(*) as `order_count`,
   sum(o.total) as `total`,
   sum(case when payment_type = 'paypal' then o.total else 0 end) as `paypal`,
-  sum(case when payment_type = 'credit' then o.total else 0 end) as `credit`,
+  sum(case when payment_type = 'credit' then o.total else 0 end) as `credit_card`,
   sum(case when payment_type = 'check' then o.total else 0 end) as `check`,
   sum(case when payment_type = 'mocc' then o.total else 0 end) as `mocc`,
-  sum(case when payment_type = 'storecredit' then o.total else 0 end) as `storecredit`,
-  sum(case when payment_type not in ('paypal', 'credit', 'check', 'mocc', 'storecredit') 
-    then o.total else 0 end) as `null_payment_type`
+  sum(case when (payment_type = 'storecredit' or
+                 payment_type not in ('paypal', 'credit', 'check', 'mocc', 'storecredit'))
+             then o.total else 0 end) as `storecredit`
 from
   orders o
     inner join (
@@ -21,7 +21,7 @@ from
           when message like "%modern%" then 'Modern'
           when message like "%2DH%" then '2DH'
           when message like "%Marquee%" then 'Marquee'
-          when message like "%LPS%" then 'LPS'
+          when (message like "%LPS%" or message like "%Tuesday%") then 'Tuesday'
             end as `event_type`
       from
         logposts
@@ -34,11 +34,11 @@ from
           message like "%Marquee%" or
           message like "%LPS%"
         )
-        and date(timestamp) between curdate()-interval 20 week and now()
+        and date(timestamp) between curdate() - interval 1 week and now()
     ) `message_table` on o.id = `message_table`.order_id
 where
   o.status = 'completed'
   and o.type = 'sale'
   and o.is_pickup = 1
 group by `event_type`, `date`
-
+order by `date`
