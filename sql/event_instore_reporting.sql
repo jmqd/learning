@@ -3,7 +3,6 @@ select
   `message_table`.`event_type`,
   count(*) as `order_count`,
   sum(o.total) as `total`,
-q
   sum(case when payment_type = 'paypal' then o.total end) as `paypal`,
   sum(case when payment_type = 'credit' then o.total end) as `credit`,
   sum(case when payment_type = 'check' then o.total end) as `check`,
