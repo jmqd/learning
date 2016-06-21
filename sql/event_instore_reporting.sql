@@ -2,11 +2,10 @@ select
   date(ship_date) as `date`,
   `message_table`.`event_type`,
   sum(o.total) as `total`,
-  case when payment_type = 'paypal' then sum(o.total) end as `paypal`,
-  case when payment_type = 'credit' then sum(o.total) end as `credit`,
-  case when payment_type = 'check' then sum(o.total) end as `check`,
-  case when payment_type = 'mocc' then sum(o.total) end as `mocc`,
-  case when payment_type not in ('paypal', 'credit', 'mocc', 'check') then sum(o.total) end as `unknown_payment_type`
+  sum(case when payment_type = 'paypal' then o.total end) as `paypal`,
+  sum(case when payment_type = 'credit' then o.total end) as `credit`,
+  sum(case when payment_type = 'check' then o.total end) as `check`,
+  sum(case when payment_type = 'mocc' then o.total end) as `mocc`
 from
   orders o
     inner join (
