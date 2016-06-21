@@ -18,6 +18,7 @@ from
         case
           when message like "%FNM%" then 'FNM'
           when message like "%Legacy%" then 'Legacy'
+          when message like "%modern%" then 'Modern'
           when message like "%2DH%" then '2DH'
           when message like "%Marquee%" then 'Marquee'
           when message like "%LPS%" then 'LPS'
@@ -28,6 +29,7 @@ from
         (
           message like "%FNM%" or 
           message like "%Legacy%" or 
+          message like "%modern%" or
           message like "%2DH%" or 
           message like "%Marquee%" or
           message like "%LPS%"
