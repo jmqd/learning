@@ -18,9 +18,10 @@ with open("input.csv", 'r') as images_to_download:
                 args['title'] = match
                 card = Card(**args)
                 card.download()
+                errors += card.errors
         else:
             card.download()
-        errors += card.errors
+            errors += card.errors
 for item in errors:
     print(item)
 
