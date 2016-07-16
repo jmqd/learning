@@ -32,7 +32,7 @@ int main()
                                       prime_factors.end(),
                                       [prime_factorization, kv](int i) 
             {
-                return i == prime_factorization.find(kv.first).first; 
+                return i == prime_factorization.find(kv.first); 
             }
             );
             if (count > kv.second)
@@ -66,7 +66,7 @@ std::vector<int> primeFactorization(int num)
         }
     }
  
-    // This condition is to handle the case whien n is a prime number
+    // This condition is to handle the case when n is a prime number
     // greater than 2
     if (num > 2)
 	{
