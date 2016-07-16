@@ -1,5 +1,5 @@
 
-names = ['jordan', 'kyle', 'kathy', 'brian']
+names = ['jordan', 'kyle', 'brian', 'kathy']
 
 def build_value_to_name_dict(names):
     values_to_names = {}
