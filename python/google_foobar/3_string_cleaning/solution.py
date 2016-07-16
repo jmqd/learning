@@ -35,4 +35,3 @@ def answer(chunk, word):
     decode_chunk(chunk, word, potentials)
     return rank_potentials(potentials)
 
-answer(chunk, word)
