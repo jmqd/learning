@@ -13,13 +13,18 @@ class Card:
         self.errors = []
         self.abbreviations = {
             'Eternal Masters': 'ema/cards',
+            'Eldritch Moon': 'emn/cards',
             }
         self.slug_re = re.compile('[^a-zA-Z\-]')
+        self.flip_card_re = re.compile('(.{1,}) (?:-|\/\/) (.{1,})')
+        self.matches = None
 
         #main instantiation; dynamic stuff -- for the most part.
         self.title = kwargs['title']
         self.edition = kwargs['edition'] if 'edition' in kwargs else 'Eternal Masters'
         self.variation = kwargs['variation'] if 'variation' in kwargs else ''
+        self.build_multi_card_matches()
+
         self.title_slug = self.get_slug('title')
         self.edition_slug = self.get_slug('edition')
         self.save_location = "{}/{}.jpg".format(self.edition_slug, self.title_slug)
@@ -28,7 +33,6 @@ class Card:
         self.foreign_edition_slug = self.get_foreign_edition_slug()
         self.static = kwargs['static'] if 'static' in kwargs else ''
         self.url = kwargs['url'] if 'url' in kwargs else self.get_url()
-
 
     def get_slug(self, attribute):
         slug = getattr(self, attribute).strip()
@@ -55,6 +59,12 @@ class Card:
         """ At present, this procedure is explicitly for mythicspoilers.com """
         foreign_slug = self.title_slug.replace('-', '')
         return foreign_slug
+
+
+    def build_multi_card_matches(self):
+        matches = self.flip_card_re.match(self.title)
+        if matches:
+            self.matches = (matches.group(1), matches.group(2))
 
 
     def download(self):
