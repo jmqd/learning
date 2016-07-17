@@ -40,3 +40,9 @@ def answer(chunk, word):
     decode_chunk(chunk, word, potentials)
     return rank_potentials(potentials)
 
+chunk = 'lollloloollollloloolollololl'
+word = 'lol'
+
+start = time.time()
+print answer(chunk, word)
+print time.time() - start
