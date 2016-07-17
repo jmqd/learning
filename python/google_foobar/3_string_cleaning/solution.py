@@ -12,7 +12,6 @@ def remove_slice(chunk, length, begin):
     chunk = chunk[:begin] + chunk[begin + length:]
     return chunk
 
-
 def decode_chunk(chunk, word, potentials):
     occurences = get_occurences(chunk, word)
     if not occurences:
@@ -20,12 +19,11 @@ def decode_chunk(chunk, word, potentials):
     if occurences:
         for occurence in occurences:
             chunk_instance = remove_slice(chunk, len(word), occurence)
-            potential = decode_chunk(chunk_instance, word, potentials)
-            if potential and potential not in potentials:
-                if not smallest:
-                    smallest = len(potential)
-                if len(potential) <= smallest:
-                    potentials.append(potential)
+        potential = decode_chunk(chunk_instance, word, potentials)
+        if potential == '':
+            potentials.append(potential)
+        if potential and potential not in potentials:
+            potentials.append(potential)
 
 def rank_potentials(potentials):
     potentials.sort(key = len)
@@ -43,9 +41,3 @@ def answer(chunk, word):
     decode_chunk(chunk, word, potentials)
     return rank_potentials(potentials)
 
-chunk = 'lollloloollollloloolollololl'
-word = 'lol'
-
-start = time.time()
-print answer(chunk, word)
-print time.time() - start
