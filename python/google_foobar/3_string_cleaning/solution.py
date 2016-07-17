@@ -2,7 +2,6 @@ from collections import deque
 
 def get_occurences(chunk, word):
     start = 0
-    starts = []
     while True:
         start = chunk.find(word, start)
         if start > -1:
