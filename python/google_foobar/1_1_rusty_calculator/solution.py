@@ -11,17 +11,18 @@ def answer(str):
             mult = 0
         if char != '*' and char != '+':
             new_str += char
-    new_str += '+' * plus
     if mult > 0:
         new_str += mult * '*'
+    new_str += '+' * plus
     return new_str
 
 def tester():
-    cases = [
+    cases = (
         '2*4*3*2+1+2+3*1+3+1*0',
         '2+1',
         '2*2',
-        ]
+        '0+1+2+3+4+5*2',
+        )
     for case in cases:
         print "Testing case: ", case
         print "Answer: ", answer(case)
