@@ -1,6 +1,3 @@
-case_1 = '2*4*3+9*3+5'
-
-
 def answer(str):
     mult = 0
     plus = 0
@@ -26,9 +23,8 @@ def tester():
         '2*2',
         ]
     for case in cases:
-        print case
-        print answer(case)
+        print "Testing case: ", case
+        print "Answer: ", answer(case)
 
 tester()
-
 
