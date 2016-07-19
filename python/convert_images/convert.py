@@ -16,6 +16,6 @@ for file in os.listdir(args.directory):
         try:
             im.load()
         except:
-            print("Problem!", file)
+            print("Problem with ", file)
             sys.exit(0)
         im.save(args.directory + '/' + name + ".jpg")
