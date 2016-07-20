@@ -143,10 +143,10 @@ class Pricer
         {
             return $min + mt_rand() / mt_getrandmax() * ($max - $min);
         }
-        echo "<pre>";
-        echo "<h3>This is the unit test module for Pricer.php.<br>
-            Shows input of price and step, and resulting output price.<br>
-            Inputs are randomly generated along ranges of known test cases.</h3>";
+        echo "<pre>\n";
+        echo "<h3>This is the unit test module for Pricer.php.\n"
+            . " Shows input of price and step, and resulting output price.\n"
+            . " Inputs are randomly generated along ranges of known test cases.</h3>";
 
         foreach ([1.00, 49.99, 199.99, 5000] as $max)
         {
@@ -155,10 +155,10 @@ class Pricer
                 $num = round(rng(0, $max), 2);
                 $step = mt_rand(-4, 4);
                 $result = $this->reprice($num, $step);
-                echo "<br>$num going $step steps: $result";
+                echo "\n$num going $step steps: $result";
             }
         }
-        echo "</pre>";
+        echo "\n</pre>";
     }
 
 }
