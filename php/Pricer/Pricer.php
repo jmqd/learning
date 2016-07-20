@@ -12,13 +12,9 @@ class Pricer
         $this->number_of_breaks = count($this->breaks);
     }
 
-    public function conform()
+    public function conform($price, $step = 0)
     {
-        // price conforming code here
-    }
-
-    public function step($price, $step)
-    {
+        $this->restart();
         $price = round($price, 2);
         if ($price >= $this->prices[$this->array_size - 1])
         {
@@ -27,7 +23,7 @@ class Pricer
                 // the last break point
                 if ($i + 1 == $this->number_of_breaks)
                 {
-                    $discrete_increment = $this->breaks[$i]['discrete_increment'];
+                    $this->discrete_increment = $this->breaks[$i]['discrete_increment'];
                     break;
                 }
                 
@@ -37,52 +33,38 @@ class Pricer
                 if ($price > $this->breaks[$i]['price']
                     and $price < $this->breaks[$i + 1]['price'])
                 {
-                    $discrete_increment = $this->breaks[$i]['discrete_increment'];
+                    $this->discrete_increment = $this->breaks[$i]['discrete_increment'];
                     break;
                 }
             }
 
-            
-            $remainder = fmod($price, $discrete_increment);
-            if ($remainder + .01 !== $discrete_increment)
+            $remainder = fmod($price, $this->discrete_increment);
+            if ($remainder + .01 !== $this->discrete_increment)
             {
                 $balanced_remainder = $remainder + 0.01;
-                if ($balanced_remainder < ($discrete_increment / 2))
+                if ($balanced_remainder < ($this->discrete_increment / 2))
                 {
                     $price -= $balanced_remainder;
                 }
 
-                elseif ($balanced_remainder > ($discrete_increment / 2))
+                elseif ($balanced_remainder > ($this->discrete_increment / 2))
                 {
-                    $price += ($discrete_increment - $balanced_remainder);
+                    $price += ($this->discrete_increment - $balanced_remainder);
                 }
 
-                elseif ($balanced_remainder === $discrete_increment / 2)
+                elseif ($balanced_remainder === $this->discrete_increment / 2)
                 {
-                    if ($tick >= 0)
+                    if ($tick >= 1)
                     {
-                        $price += $balanced_remainder;
+                        $price += ($this->discrete_increment - $balanced_remainder);
                     }
 
-                    if ($tick < 1)
+                    if ($tick <= 0)
                     {
                         $price -= $balanced_remainder;
                     }
                 }
             }
-            if (($price - ($discrete_increment * $step)) < 49.99)
-            {
-                while ($price > 49.99)
-                {
-                    $price += $discrete_increment * -1;
-                    ++$step;
-                }
-
-                $price = $this->prices[$this->array_size - 1 + $step];
-                return $price;
-            }
-
-            $price += $discrete_increment * $step;
             return $price;
         }
 
@@ -101,12 +83,49 @@ class Pricer
                 }
             }
         }
+        return $this->prices[$price_key];
+    }
+
+
+    private function restart()
+    {
+        $this->discrete_increment = null;
+    }
+
+
+    public function reprice($price, $step)
+    {
+        $this->restart();
+        $price = $this->conform($price, $step);
+
+        if ($price > $this->prices[$this->array_size - 1]
+            and $step < 0 
+            and $price + $this->discrete_increment * $step 
+            < $this->prices[$this->array_size - 1])
+        {
+            while ($price > $this->prices[$this->array_size - 1])
+            {
+                $price += $this->discrete_increment * -1;
+                ++$step;
+            }
+
+            $price = $this->prices[$this->array_size - 1 + $step];
+            return $price;
+        }
         
-        if (($price_key + $step) > $this->array_size)
+        if ($price > $this->prices[$this->array_size - 1])
+        {
+            $price += $this->discrete_increment * $step;
+            return $price;
+        }
+
+        $price_key = array_search($price, $this->prices);
+        
+        if (($price_key + $step) > $this->array_size - 1)
         {
             $extra_steps = $step - ($this->array_size - 1 - $price_key);
             $price = $this->prices[$this->array_size - 1];
-
+            return $price + $extra_steps * $this->breaks[0]['discrete_increment'];
         }
 
         return $this->prices[$price_key + $step];
@@ -123,9 +142,9 @@ class Pricer
         {
             for ($i = 0; $i < 10; ++$i)
             {
-                $num = rng(0, $max);
+                $num = round(rng(0, $max), 2);
                 $step = mt_rand(-4, 4);
-                $result = $this->step($num, $step);
+                $result = $this->reprice($num, $step);
                 echo "\n$num going $step steps: $result";
             }
         }
