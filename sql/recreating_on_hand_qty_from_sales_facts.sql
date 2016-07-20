@@ -12,7 +12,7 @@ from (
     o.ship_date as `date`,
     o.order_date as `date_of_order`,
     case
-      when li.is_selling = 0 then li.qty - 2 * li.qty
+      when li.is_selling = 0 then -li.qty
       when li.is_selling = 1 then li.qty
     end as `delta`
   from
