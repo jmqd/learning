@@ -10,7 +10,9 @@ function search(list, value, start = null, stop = null)
     index = start + Math.floor((stop - start) / 2)
     console.log('setting index to ' + index);
 
-    if (index < 0 || index > list.length - 1 || start > stop)
+    if (index < 0
+        || index > list.length - 1
+        || start > stop)
     {
         console.log('value not in array');
         return false;
