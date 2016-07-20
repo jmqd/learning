@@ -19,10 +19,7 @@ class Pricer
 
     public function step($price, $step)
     {
-        $high_break = 199.99;
-        $discrete_increment = 5.00;
-        $high_discrete_increment = 10.00;
-
+        $price = round($price, 2);
         if ($price >= $this->prices[$this->array_size - 1])
         {
             for ($i = 0; $i < $this->number_of_breaks; ++$i)
@@ -47,7 +44,7 @@ class Pricer
 
             
             $remainder = fmod($price, $discrete_increment);
-            if (!in_array($remainder + .01, [5.00, 10.00]))
+            if ($remainder + .01 !== $discrete_increment)
             {
                 $balanced_remainder = $remainder + 0.01;
                 if ($balanced_remainder < ($discrete_increment / 2))
@@ -57,7 +54,7 @@ class Pricer
 
                 elseif ($balanced_remainder > ($discrete_increment / 2))
                 {
-                    $price += $balanced_remainder;
+                    $price += ($discrete_increment - $balanced_remainder);
                 }
 
                 elseif ($balanced_remainder === $discrete_increment / 2)
@@ -129,7 +126,7 @@ class Pricer
                 $num = rng(0, $max);
                 $step = mt_rand(-4, 4);
                 $result = $this->step($num, $step);
-                echo "\n$num going up $step steps: $result\n";
+                echo "\n$num going $step steps: $result";
             }
         }
     }
