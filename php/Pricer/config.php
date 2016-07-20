@@ -22,8 +22,8 @@ return
 
     'breaks' =>
     [
-        ['price' => 49.99, 'discrete_step' => 5.00], 
-        ['price' => 199.99, 'discrete_step' => 10.00],
+        ['price' => 49.99, 'discrete_increment' => 5.00], 
+        ['price' => 199.99, 'discrete_increment' => 10.00],
     ],
  
 ];

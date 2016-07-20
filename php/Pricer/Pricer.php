@@ -116,11 +116,22 @@ class Pricer
     }
 
 
-    public static function unit_test()
+    public function unit_test()
     {
-        echo "<pre>";
-        echo step(0.87, 1);
-        echo "</pre>";
+        function rng($min = 0, $max = 1)
+        {
+            return $min + mt_rand() / mt_getrandmax() * ($max - $min);
+        }
+        foreach ([49.99, 199.99, 5000] as $max)
+        {
+            for ($i = 0; $i < 10; ++$i)
+            {
+                $num = rng(0, $max);
+                $step = mt_rand(-4, 4);
+                $result = $this->step($num, $step);
+                echo "\n$num going up $step steps: $result\n";
+            }
+        }
     }
 
 }
