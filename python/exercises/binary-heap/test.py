@@ -9,5 +9,6 @@ heap.insert(54)
 heap.insert(53)
 heap.insert(53)
 heap.insert(52)
+heap.delete(heap.tree[0])
 for node in heap.tree:
     print(node.__dict__)

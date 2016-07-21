@@ -77,12 +77,15 @@ class Heap:
 
 
     def delete(self, node):
+        index = node.get_index()
         self.swap(node, self.last)
         self.tree.pop()
         self.size -= 1
+        self.check(self.tree[index])
 
     def check(self, node):
         for child in node.children():
             if child.get_value() > node.get_value():
                 self.swap(node, node.get_largest_child())
+                self.correct(node)
 
