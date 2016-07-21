@@ -128,6 +128,11 @@ class Pricer
             return $price + $extra_steps * $this->breaks[0]['discrete_increment'];
         }
 
+        if ($price_key + $step < 0)
+        {
+            return $this->prices[0];
+        }
+
         return $this->prices[$price_key + $step];
     }
 
@@ -138,9 +143,14 @@ class Pricer
         {
             return $min + mt_rand() / mt_getrandmax() * ($max - $min);
         }
-        foreach ([49.99, 199.99, 5000] as $max)
+        echo "<pre>\n";
+        echo "<h3>This is the unit test module for Pricer.php.\n"
+            . " Shows input of price and step, and resulting output price.\n"
+            . " Inputs are randomly generated along ranges of known test cases.</h3>";
+
+        foreach ([1.00, 49.99, 199.99, 5000] as $max)
         {
-            for ($i = 0; $i < 10; ++$i)
+            for ($i = 0; $i < 5; ++$i)
             {
                 $num = round(rng(0, $max), 2);
                 $step = mt_rand(-4, 4);
@@ -148,6 +158,7 @@ class Pricer
                 echo "\n$num going $step steps: $result";
             }
         }
+        echo "\n</pre>";
     }
 
 }
