@@ -36,10 +36,13 @@ class Heap:
             }
         node = Node.Node(**keywords)
         self.tree.append(node)
+        self.refresh()
         self.correct(node)
-        self.size += 1
         return self
 
+    def refresh(self):
+        self.size = len(self.tree)
+        self.height = math.floor(math.log(self.size, 2))
 
     def get_node(self, index):
         if index > self.size - 1:
@@ -80,7 +83,7 @@ class Heap:
         index = node.get_index()
         self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
-        self.size -= 1
+        self.refresh()
         self.check(self.tree[index])
         self.correct(self.tree[index])
 
@@ -90,4 +93,18 @@ class Heap:
                 self.swap(node, node.get_largest_child())
                 self.queue.put(node)
                 self.queue.put(child)
+
+    def draw(self):
+        string = " " * 14
+        string += str(self.get_node(0).get_value())
+        node_i = 1
+        for height in range(1, self.height + 1):
+            string += " " * (14 - 2 * height)
+            for i in range(2**height - 2):
+                string += "  "
+                string += str(self.get_node(node_i).get_value())
+                node_i += 1
+            string += "\n"
+        print(string)
+
 

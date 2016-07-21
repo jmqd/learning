@@ -15,3 +15,4 @@ heap.insert(5)
 heap.insert(101)
 for node in heap.tree:
     print(node.__dict__)
+heap.draw()
