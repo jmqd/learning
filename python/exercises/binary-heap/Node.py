@@ -42,3 +42,22 @@ class Node:
     def is_root(self):
         if self.index == 0:
             return True
+
+    def is_leaf(self):
+        if len(self.children()) == 0:
+            return True
+        return False
+
+
+    def get_largest_child(self):
+        if self.is_leaf():
+            return False
+        if not self.left():
+            if self.right():
+                return self.right()
+        if not self.right():
+            if self.left():
+                return self.left()
+        if self.left().get_value() > self.right().get_value():
+            return self.left()
+        return self.right()

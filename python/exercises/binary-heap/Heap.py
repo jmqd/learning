@@ -1,4 +1,4 @@
-import Node, math, sys
+import Node, math, sys, queue
 
 class Heap:
 
@@ -7,6 +7,7 @@ class Heap:
         data = kwargs.pop('data', ())
         self.type = kwargs.pop('type', 'max')
         self.tree = []
+        self.queue = queue.Queue()
         if data:
             self.size = len(data)
             self.height = math.floor(math.log(self.size, 2))
@@ -36,8 +37,7 @@ class Heap:
             }
         node = Node.Node(**keywords)
         self.tree.append(node)
-        if not self.verify(node):
-            self.correct(node)
+        self.correct(node)
         self.size += 1
         return self
 
@@ -47,6 +47,7 @@ class Heap:
             return False
         return self.tree[index]
 
+
     def verify(self, node):
         if node.parent().get_value() >= node.get_value():
             return True
@@ -55,10 +56,18 @@ class Heap:
 
     def correct(self, node):
         while node.parent().get_value() < node.get_value():
+            self.queue.put(node.parent())
             self.swap(node.parent(), node)
             if node.is_root():
+                self.check(node)
                 break
+        self.resolve_queue()
 
+
+    def resolve_queue(self):
+        while not self.queue.empty():
+            node = self.queue.get()
+            self.correct(node)
 
     def swap(self, a, b):
         i, j = a.get_index(), b.get_index()
@@ -71,3 +80,9 @@ class Heap:
         self.swap(node, self.last)
         self.tree.pop()
         self.size -= 1
+
+    def check(self, node):
+        for child in node.children():
+            if child.get_value() > node.get_value():
+                self.swap(node, node.get_largest_child())
+
