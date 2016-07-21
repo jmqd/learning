@@ -22,8 +22,10 @@ class Heap:
 
     def build(self):
         for node in reversed(self.tree):
-            if not self.verify(node):
-                self.correct(node)
+            if node.has_children():
+                for child in node.children():
+                    if not self.verify(child):
+                        self.correct(child)
 
 
     def insert(value):
@@ -39,6 +41,8 @@ class Heap:
 
 
     def get_node(self, index):
+        if index > self.size - 1:
+            return False
         return self.tree[index]
 
     def verify(self, node):
@@ -50,6 +54,8 @@ class Heap:
     def correct(self, node):
         while node.parent().get_value() < node.get_value():
             self.swap(node.parent(), node)
+            if node.is_root():
+                break
 
 
     def swap(self, a, b):
@@ -57,8 +63,6 @@ class Heap:
         self.tree[i], self.tree[j] = self.tree[j], self.tree[i]
         a.set_index(j)
         b.set_index(i)
-        print('swapping ', i, 'to ', j)
-        sys.exit(0)
 
 
     def delete(self, node):

@@ -25,3 +25,20 @@ class Node:
 
     def set_value(self, value):
         self.value = value
+
+    def has_children(self):
+        if self.left() or self.right():
+            return True
+        return False
+
+    def children(self):
+        children = []
+        if self.left():
+            children.append(self.left())
+        if self.right():
+            children.append(self.right())
+        return children
+
+    def is_root(self):
+        if self.index == 0:
+            return True

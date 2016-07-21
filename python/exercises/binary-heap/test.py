@@ -1,7 +1,7 @@
 import Heap, pprint
 
 keywords = {
-    'data': (1, 2, 3),
+    'data': (5, 9, 20, 31, 14, 2, 5),
         }
 heap = Heap.Heap(**keywords)
 for node in heap.tree:
