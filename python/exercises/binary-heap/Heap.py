@@ -13,7 +13,6 @@ class Heap:
             self.height = math.floor(math.log(self.size, 2))
             self.initialize_tree(data)
             self.build()
-        self.last = self.tree[self.size - 1]
 
 
     def initialize_tree(self, data):
@@ -67,6 +66,7 @@ class Heap:
     def resolve_queue(self):
         while not self.queue.empty():
             node = self.queue.get()
+            self.check(node)
             self.correct(node)
 
     def swap(self, a, b):
@@ -77,15 +77,19 @@ class Heap:
 
 
     def delete(self, node):
+        for sap in self.tree:
+            print(sap.__dict__)
         index = node.get_index()
-        self.swap(node, self.last)
+        self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
         self.size -= 1
         self.check(self.tree[index])
+        self.correct(self.tree[index])
 
     def check(self, node):
         for child in node.children():
             if child.get_value() > node.get_value():
                 self.swap(node, node.get_largest_child())
-                self.correct(node)
+                self.queue.put(node)
+                self.queue.put(child)
 
