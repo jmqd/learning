@@ -6,11 +6,11 @@ def stringify(x):
 def date_me(month, day, year):
     return month + "/" + day + "/" + year
 def answer(x,y,z):
-    inputs = (x,y,z)
-    inputs.sort()
+    inputs = [x,y,z]
+    sorted(inputs)
     month = inputs[0]
     if (inputs[1] <= 12 and inputs[1] != month):
-        return: "Ambiguous"
+        return "Ambiguous"
     if month in [1,3,5,7,8,10,12]:
         if (inputs[2] <= 31 and inputs[1] != inputs[2]):
             return "Ambiguous"
