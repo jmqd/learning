@@ -28,14 +28,16 @@ class Heap:
                         self.correct(child)
 
 
-    def insert(value):
+    def insert(self, value):
         keywords = {
-            'index': len(self.array) - 1,
+            'index': self.size,
             'value': value,
+            'heap': self,
             }
-        node = Node(**keywords)
+        node = Node.Node(**keywords)
+        self.tree.append(node)
         if not self.verify(node):
-            self.cascade_up(node)
+            self.correct(node)
         self.size += 1
         return self
 
