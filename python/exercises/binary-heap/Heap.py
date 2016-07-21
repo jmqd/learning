@@ -77,8 +77,6 @@ class Heap:
 
 
     def delete(self, node):
-        for sap in self.tree:
-            print(sap.__dict__)
         index = node.get_index()
         self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
