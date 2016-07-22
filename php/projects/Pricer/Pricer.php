@@ -93,6 +93,17 @@ class Pricer
     }
 
 
+    public function suggest($product)
+    {
+        $price = $product->price;
+        $price = $this->conform($price);
+
+        // price suggestion algorithm code here ...
+
+        return $price;
+    }
+
+
     public function reprice($price, $step)
     {
         $this->restart();
