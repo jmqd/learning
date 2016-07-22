@@ -1,4 +1,4 @@
-import Heap, pprint
+import Heap, pprint, random
 
 keywords = {
     'data': (5, 9, 20, 31, 14, 2, 5),
@@ -13,6 +13,8 @@ heap.insert(100)
 heap.delete(heap.tree[0])
 heap.insert(5)
 heap.insert(101)
+for i in range(0, 40):
+    heap.insert(random.randint(1, 99))
 for node in heap.tree:
-    print(node.__dict__)
+    pprint.pprint(node.__dict__)
 heap.draw()
