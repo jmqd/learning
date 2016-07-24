@@ -79,6 +79,10 @@ class Heap:
         b.set_index(i)
 
 
+    def find_max(self):
+        return self.tree[0]
+
+
     def delete(self, node):
         index = node.get_index()
         self.swap(node, self.tree[self.size - 1])
