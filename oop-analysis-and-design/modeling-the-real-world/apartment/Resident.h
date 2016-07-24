@@ -2,7 +2,7 @@
 #ifndef Resident_H
 #define Resident_H
 
-class Resident: Public AbstractPerson {
+class Resident: public AbstractPerson {
 {
 
 public:

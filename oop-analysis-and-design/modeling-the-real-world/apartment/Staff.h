@@ -2,7 +2,7 @@
 #ifndef Staff_H
 #define Staff_H
 
-class Staff
+class Staff: public AbstractPerson
 {
 
 public:
