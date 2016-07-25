@@ -1,7 +1,22 @@
 # Teaching a friend how to code via Python, part 1: Fib seq.
+# A few observations:
+#   - Notice none of my lines go beyond 80 characters. That is intentional.
+#       It is a good practice that you should start immediately.
+#   - Things "logically together" are together. A newline is put between
+#       things that are categorically different somehow. It's kind of like
+#       paragraps in essays.
 
+# Initializing our variables.
 terms = [0, 1]
 up_to_n = 10
+
+# len() is a function that returns an integer equal to the number of items
+# in a list, set, dict, etc. This kinds of items are collectively called
+# "collections," because they are collections of items (elements).
+
+# the line below might be read as: "while the length of terms is less than or
+# or equal to the variable up_to_n, do ..."
+
 while len(terms) <= up_to_n:
     terms.append(terms[-1] + terms[-2])
 
