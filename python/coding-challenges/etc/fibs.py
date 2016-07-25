@@ -8,17 +8,18 @@ while len(terms) <= up_to_n:
 # This is a comment.
 # The \n character is a "newline character."
 print("\nThis computes the sequences and stores it all" \
-    + "in memory, then prints it out.")
+    + " in memory, then prints it out.")
 print(terms)
 print("\n")
 
+# Moving on to a different approach for the problem:
+
+print("This computes the instances of every given n in the sequence up to N,")
+print("printing out the instances as it goes, storing no more than two")
+print("variables in memory at any given time. (Ignoring i and up_to_n.)")
+
 a = 0
 b = 1
-
-print("This computes the instances of every given n in the sequence up to N," \
-       + "printing out the instances as it goes, storing no more than two" \
-       + "variables in memory at any given time. (Ignoring i and up_to_n.)\n")
-
 for i in range(up_to_n - 1):
     # this is fancy python assignment syntax. you will love this.
     a, b = b, (a + b)
