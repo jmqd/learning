@@ -103,14 +103,15 @@ class Heap:
         string = ""
         node_i = 0
         for height in range(0, self.height + 1):
-            space_between = space_counter * " "
+            space_between = space_counter // 3 * " - "
             space_counter //= 2
             string += " " * space_counter
             for i in range(0, 2**height):
                 if not self.get_node(node_i):
                     break
                 string += str(self.get_node(node_i).get_value())
-                string += space_between
+                if node_i != 0 and i + 1 != 2**height:
+                    string += space_between
                 node_i += 1
             string += "\n"
         print(string)

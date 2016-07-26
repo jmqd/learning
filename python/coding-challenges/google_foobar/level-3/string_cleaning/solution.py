@@ -11,7 +11,7 @@ def get_occurences(chunk, word):
             break
 
 def remove_slice(chunk, start, end):
-    return chunk[:start] + chunk [end:]
+    return chunk[:start] + chunk[end:]
 
 def decode_chunk(chunk, word):
     answer = chunk
