@@ -7,7 +7,7 @@ quandl.ApiConfig.api_version = '2015-04-09'
 def in_usd(date, amount, currency):
     data = quandl.get('CURRFX/{}USD'.format(currency))
     row = data.loc[date, 'Rate']
-    return float(row) * amount
+    return row * amount
 
 date = str(input("Date: "))
 amount = float(input("Amount: "))
