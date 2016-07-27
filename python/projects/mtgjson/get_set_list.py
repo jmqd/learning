@@ -1,31 +1,40 @@
 import sys, urllib.request, json, pprint, csv
 from datetime import date
 
-try:
-    req = urllib.request.Request('http://mtgjson.com/json/SetList.json')
-    req.add_header('User-agent',
-                'Python 3.4.3; Jordan M.; jmcqueen@cardkingdom.com')
-    response = urllib.request.urlopen(req)
-    set_list = urllib.request.urlopen(req).read().decode()
-    response.close()
-except Exception as error:
-    print("-- ", error)
-finally:
+def get_url(url):
     try:
-        response.close()
-    except NameError:
-        pass
-set_list = json.loads(set_list)
-set_dict = {}
-with open('set-list-{}.tsv'.format(date.today()), 'w', newline = '\n') as tsv:
-    writer = csv.writer(tsv, delimiter = '\t')
-    writer.writerow(['name', 'code', 'release_date'])
-    for edition in set_list:
-        writer.writerow([edition['name'],
-                         edition['code'],
-                         edition['releaseDate'],])
-        set_dict[edition['name']] = {
-            'code': edition['code'],
-            'release_date': edition['releaseDate'],
-            }
-pprint.pprint(set_dict, indent=3)
+        req = urllib.request.Request(url)
+        req.add_header('User-agent',
+                    'Python 3.4.3; Jordan M.; jmcqueen@cardkingdom.com')
+        response_object = urllib.request.urlopen(req)
+        response = response_object.read().decode()
+    except Exception as error:
+        print("-- ", error)
+    finally:
+        try:
+            response_object.close()
+        except NameError:
+            pass
+    return response
+
+
+def write_to_tsv(list_of_dicts, name = 'set-list'):
+    filename = '{}-{}.tsv'.format(name, date.today())
+    with open(filename, 'w', newline = '\n') as tsv:
+        writer = csv.writer(tsv, delimiter = '\t')
+        # statically programmed for this instance -- I want a specific order
+        writer.writerow(['name', 'code', 'release_date'])
+        for edition in list_of_dicts:
+            writer.writerow([edition['name'],
+                             edition['code'],
+                             edition['releaseDate'],])
+    return True
+
+# specific stuff...
+url = "http://mtgjson.com/json/SetList.json"
+
+json_string = get_url(url)
+list_of_dicts = json.loads(json_string)
+write_to_tsv(list_of_dicts)
+
+pprint.pprint(list_of_dicts, indent=2)
