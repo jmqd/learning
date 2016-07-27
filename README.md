@@ -1,6 +1,6 @@
-# learning_sandbox
-My learning space.
+# learning
+“The important thing is not to stop questioning. Curiosity has its own reason for existing.”
 
 Every file here represents something that I've learned. 
 
-The hope is that if I amass enough files here, I'll know something. ;)
+If I amass enough files here, I _might_ know _something_. ;)
