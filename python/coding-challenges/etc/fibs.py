@@ -29,9 +29,9 @@ print("\n")
 
 # Moving on to a different approach for the problem:
 
-print("This computes the instances of every given n in the sequence up to N,")
-print("printing out the instances as it goes, storing no more than two")
-print("variables in memory at any given time. (Ignoring i and up_to_n.)")
+print("This computes the instances of every given n in the sequence up to" \
+    + " N, printing out the instances as it goes, storing no more than two" \
+    + " variables in memory at any given time. (Ignoring i and up_to_n.)")
 
 a = 0
 b = 1
