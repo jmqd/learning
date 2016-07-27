@@ -1,7 +1,3 @@
-# Up to now, you've been working with lists, strings, ints, etc.
-# An int and string are a type of data. In python, although this is
-# not the case in all programming languages, these are all actually "objects."
-
 # Think of an object in the following way:
 #   An object is a set of keys and values. This set of keys and values composes
 #       the "properties" of the object. This object also has functions that it
@@ -30,13 +26,15 @@ print(second_item)
 # This is a dictionary.
 dictionary = {'the first element': 'the first value', 'Ryan': 'Lestnor'}
 
-# To access those elements looks like this:
 print("\nAccessing a dictionary....\n")
+
+# To access those elements looks like this:
 first_item = dictionary['the first element']
-print(first_item)
 
 name = 'Ryan' # simple variable assignment
 nickname = dictionary[name] # using variable to lookup value in dictionary
+
+print(first_item)
 print(nickname)
 
 # A few things to know:
