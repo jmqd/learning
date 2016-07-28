@@ -2,3 +2,6 @@ api-key.py
 personal_keys.py
 keys.py
 __pycache__/
+secret_file.py
+scalable/__pycache__/
+scalable/secret_file.py
