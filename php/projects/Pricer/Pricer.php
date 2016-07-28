@@ -54,12 +54,12 @@ class Pricer
 
                 elseif ($balanced_remainder === $this->discrete_increment / 2)
                 {
-                    if ($tick >= 1)
+                    if ($step >= 1)
                     {
                         $price += ($this->discrete_increment - $balanced_remainder);
                     }
 
-                    if ($tick <= 0)
+                    if ($step <= 0)
                     {
                         $price -= $balanced_remainder;
                     }
