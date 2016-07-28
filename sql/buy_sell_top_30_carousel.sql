@@ -1,5 +1,5 @@
 select
-  `raw_data`.`id`,
+  `raw_data`.`id` as `product_id`,
   `raw_data`.`name`,
   `raw_data`.`resolved_qty`/`raw_data`.`threshold` as `resolved_equity`,
   `raw_data`.`resolved_qty`,
