@@ -1,6 +1,5 @@
 import datetime, quandl, secret_file, pandas as pd, csv, sys, pickle, argparse
-
-import argparse
+import numpy as np, argparse
 
 parser = argparse.ArgumentParser(description='Transform those currencies. :)')
 parser.add_argument('csv', type=str, help='csv of row_id, date, currency_code, amount')
@@ -46,15 +45,22 @@ def in_usd(date, amount, table):
 def transform(csv):
     with open('rate_tables/table.p', 'rb') as f:
         rates = pickle.load(f)
+    output = np.array(['row_id', 'date', 'currency', 'amount', 'in_usd'])
     for row in csv:
         row_id = row[0]
         date = row[1]
         currency = row[2]
         amount = float(row[3])
-        print(row_id, '{} {} on {} ='.format(amount, currency, date), in_usd(date, amount, rates[currency]), 'USD')
+        usd_amount = in_usd(date, amount, rates[currency])
+        output = np.vstack([output, [row_id, date, currency, amount, usd_amount]])
+    return output
+
 
 with open(args.csv, 'r') as f:
     reader = csv.reader(f)
     csv = list(reader)
 
-transform(csv)
+output = transform(csv)
+print(output)
+
+np.savetxt('transform.tsv', output, delimiter = '\t', fmt = '%10s', newline = '\n')
