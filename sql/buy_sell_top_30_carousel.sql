@@ -14,7 +14,7 @@ from (
     from
       products `p`
     where
-      p.`is_active` = 1
+      `p`.`is_active` = 1
       and `p`.`is_template` = 0
       and `p`.`model` = 'mtg_card'
       and `p`.`qty_to_buy` > 0
