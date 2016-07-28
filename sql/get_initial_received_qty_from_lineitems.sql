@@ -9,6 +9,7 @@ set
   Top-level query that returns the result set.
 */
 select
+  `product_id`,
   `name`,
   `qty` + `total_sold` - `total_bought` as `initial`,
   `qty` as `current_nm_qty`,
@@ -21,6 +22,7 @@ from
 (
   select
     `p`.`name`,
+    `p`.`id` as `product_id`,
     sum(case when li.is_selling = 1 then li.qty else 0 end) as `total_bought`,
     sum(case when li.is_selling = 0 then li.qty else 0 end) as `total_sold`,
     pq.qty
