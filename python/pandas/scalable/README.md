@@ -1,5 +1,5 @@
 # Currency Converter
-#### A proof-of-concept of a solution to a currency conversion problem involving historical sales data. Inputs: a csv of [row_id, date, currency_code, amount]. Outputs: text to standard output [row_id, conversion, amount_in_usd]
+#### A proof-of-concept of a solution to a currency conversion problem involving historical sales data. Inputs: a csv of [row_id, date, currency_code, amount]. Outputs: numpy array to standard output [row_id, conversion, amount_in_usd] and saves to tsv.
 
 ##### The test.csv example above outputs the following into transform.tsv.
 ```
@@ -12,5 +12,5 @@ row_id	      date	  currency	    amount	    in_usd
       1236	2013-04-14	       SGD	    554.31	448.04313340365866
       1237	2012-02-09	       KRW	      14.0	0.0125391848850996
       1238	2011-07-05	       BRL	   2231.12	1438.0406589222039
-      1239	2010-03-12	       INR	    104.88	2.3051561965048064``
+      1239	2010-03-12	       INR	    104.88	2.3051561965048064
 ```
