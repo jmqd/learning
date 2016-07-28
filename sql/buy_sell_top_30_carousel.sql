@@ -8,8 +8,8 @@ from (
     select
       `p`.`id`,
       `p`.`name`,
-      `p`.`qty` - p.`qty_out` + p.`qty_in` as `resolved_qty`,
-      `p`.`qty_out` + p.`qty_in` as `activity`,
+      `p`.`qty` - `p`.`qty_out` + `p`.`qty_in` as `resolved_qty`,
+      `p`.`qty_out` + `p`.`qty_in` as `activity`,
       `p`.`threshold`
     from
       products `p`
