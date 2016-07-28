@@ -40,8 +40,7 @@ from (
       where
         o.coupon = 'GAUNTLET'
         and o.type = 'sale'
-        and o.status != 'canceled'
-        and o.status != 'cart'
+        and o.status not in ('cart', 'canceled')
       ) `coupon_orders` on `customer_orders`.`order_id` = `coupon_orders`.`order_id`) as `coupon`
     join (
         select distinctrow
@@ -84,8 +83,7 @@ from (
             where
                 o.coupon = 'GAUNTLET'
                 and o.type = 'sale'
-                and o.status != 'canceled'
-                and o.status != 'cart'
+                and o.status not in ('cart', 'canceled')
       ) `coupon_orders` on `customer_orders`.`account_id` = `coupon_orders`.`account_id`
     ) `previous_orders` on (`coupon`.`account_id` = `previous_orders`.`account_id` and `coupon`.`row_number` - 1 = `previous_orders`.`row_number`)
     where timestampdiff(day, `coupon`.`order_date`, `previous_orders`.`order_date`) <= -90
