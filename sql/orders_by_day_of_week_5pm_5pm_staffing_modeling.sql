@@ -11,8 +11,9 @@ set
   @to_date := '2016-07-25 17:00:00';
 select
   `weekday`,
-  avg(`orders`) as `avg_orders`,
-  avg(`lineitems`) as `avg_lineitems`
+  round(avg(`orders`), 0) as `avg_orders`,
+  round(avg(`lineitems`), 0) as `avg_lineitems`,
+  round(avg(`items`), 0) as `avg_items`
 from 
 (
   select
@@ -26,7 +27,8 @@ from
       when weekday(ready_on + interval 7 hour) = 6 then 'Sunday'
       end as `weekday`,
     count(distinct o.id) as `orders`,
-    sum(li.qty) as `lineitems`  
+    count(distinct li.id) as `lineitems`,
+    sum(li.qty) as `items`
   from
     orders o
   inner join
