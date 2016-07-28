@@ -1,5 +1,7 @@
 # Currency Converter
-#### A proof-of-concept of a solution to a currency conversion problem involving historical sales data. Inputs: a csv of [row_id, date, currency_code, amount]. Outputs: numpy array to standard output [row_id, conversion, amount_in_usd] and saves to tsv.
+#### A proof-of-concept of a solution to a currency conversion problem involving historical sales data. <br />
+#### Inputs: a csv of N [row_id, date, currency_code, amount] rows.<br />
+#### Outputs: numpy array to standard output [row_id, date, currency, amount, in_usd] and saves to tsv.
 
 ##### The test.csv example above outputs the following into transform.tsv.
 ```
