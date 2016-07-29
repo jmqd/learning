@@ -15,11 +15,11 @@ select
   `qty` as `current_nm_qty`,
   `total_sold`,
   `total_bought`
+from
+(
 /*
   Inner query from which the outer query pulls its values.
 */
-from
-(
   select
     `p`.`name`,
     `p`.`id` as `product_id`,
