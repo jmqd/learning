@@ -1,5 +1,5 @@
 import datetime, quandl, secret_file, pandas as pd, csv, sys, pickle, argparse
-import numpy as np, argparse
+import numpy as np
 
 parser = argparse.ArgumentParser(description='Transform those currencies. :)')
 parser.add_argument('csv', type=str, help='csv of row_id, date, currency_code, amount')
