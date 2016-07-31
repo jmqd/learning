@@ -103,7 +103,7 @@ class Heap:
         string = ""
         node_i = 0
         for height in range(0, self.height + 1):
-            space_between = space_counter // 3 * " - "
+            space_between = space_counter * "-"
             space_counter //= 2
             string += " " * space_counter
             for i in range(0, 2**height):
