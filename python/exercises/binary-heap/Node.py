@@ -15,6 +15,14 @@ class Node:
         return self.heap.get_node((self.index - 1) // 2)
 
     def left(self):
+        if self.heap.size < 2 * self.index:
+            return self.heap.tree[2 * self.index]
+
+    def right(self):
+        if self.heap.size < 2 * self.index + 1:
+            return self.heap.tree[2 * self.index + 1]
+
+    def left(self):
         return self.heap.get_node(2 * self.index + 1)
 
     def right(self):

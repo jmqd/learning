@@ -12,10 +12,10 @@ class Pricer
         $this->number_of_breaks = count($this->breaks);
     }
 
-    public function conform($price, $step = 0)
+    public function conform($input_price, $step = 0)
     {
         $this->restart();
-        $price = round($price, 2);
+        $price = round($input_price, 2);
         if ($price >= $this->prices[$this->array_size - 1])
         {
             for ($i = 0; $i < $this->number_of_breaks; ++$i)
@@ -26,10 +26,12 @@ class Pricer
                     $this->discrete_increment = $this->breaks[$i]['discrete_increment'];
                     break;
                 }
-                
-                // this is the correct break point
-                // iff price > break_price & price > next_break_price ||
-                // break_price == max(break_prices)
+
+                /*
+                 * this is the correct break point
+                 * iff price > break_price & price > next_break_price ||
+                 * break_price == max(break_prices)
+                 */
                 if ($price > $this->breaks[$i]['price']
                     and $price < $this->breaks[$i + 1]['price'])
                 {
@@ -75,7 +77,7 @@ class Pricer
             $closest = null;
             foreach ($this->prices as $index => $price_step)
             {
-                if ($closest === null 
+                if ($closest === null
                     or abs($price - $closest) > abs($price_step - $price))
                 {
                     $closest = $price_step;
@@ -104,14 +106,14 @@ class Pricer
     }
 
 
-    public function reprice($price, $step)
+    public function reprice($input_price, $step)
     {
         $this->restart();
-        $price = $this->conform($price, $step);
+        $price = $this->conform($input_price, $step);
 
         if ($price > $this->prices[$this->array_size - 1]
-            and $step < 0 
-            and $price + $this->discrete_increment * $step 
+            and $step < 0
+            and $price + $this->discrete_increment * $step
             < $this->prices[$this->array_size - 1])
         {
             while ($price > $this->prices[$this->array_size - 1])
@@ -123,7 +125,7 @@ class Pricer
             $price = $this->prices[$this->array_size - 1 + $step];
             return $price;
         }
-        
+
         if ($price > $this->prices[$this->array_size - 1])
         {
             $price += $this->discrete_increment * $step;
@@ -131,7 +133,7 @@ class Pricer
         }
 
         $price_key = array_search($price, $this->prices);
-        
+
         if (($price_key + $step) > $this->array_size - 1)
         {
             $extra_steps = $step - ($this->array_size - 1 - $price_key);

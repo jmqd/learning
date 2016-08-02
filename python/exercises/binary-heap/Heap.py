@@ -21,9 +21,9 @@ class Heap:
 
 
     def build(self):
-        for node in reversed(self.tree):
-            if node.has_children():
-                self.correct(node)
+        for i in range (self.size - 1, 0, -1):
+            if self.tree[i].has_children():
+                self.heapify(self.tree[i])
 
 
     def get_size(self):
@@ -39,8 +39,8 @@ class Heap:
         node = Node.Node(**keywords)
         self.tree.append(node)
         self.refresh()
-        self.correct(node.parent())
-        self.correct(node)
+        self.heapify(node.parent())
+        self.heapify(node)
         return self
 
 
@@ -60,7 +60,7 @@ class Heap:
     def resolve_queue(self):
         while not self.queue.empty():
             node = self.queue.get()
-            self.correct(node)
+            self.heapify(node)
 
 
     def swap(self, active, passive):
@@ -79,11 +79,11 @@ class Heap:
         self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
         self.refresh()
-        self.correct(self.tree[index])
+        self.heapify(self.tree[index])
 
     def correct(self, node):
         if node.largest_child() and node.largest_child().get_value() > node.get_value():
-            node = self.maxify(node)
+            node = self.heapify(node)
         while node.parent() and node.parent().get_value() < node.get_value():
             self.queue.put(node.parent())
             if node.get_sibling() and node.get_sibling().get_value() > node.get_value():
@@ -92,11 +92,13 @@ class Heap:
             if node.is_root():
                 break
 
-    def maxify(self, node):
-        possibles = [node, node.get_sibling(), node.parent()]
-        possibles.sort(key = operator.attrgetter("value"), reverse = True)
-        self.swap(possibles[0], possibles[len(possibles) - 1])
-        return possibles[0]
+    def heapify(self, node):
+        largest = node.largest_child()
+        if not largest:
+            return
+        if largest.get_value() > node.get_value():
+            self.swap(node, largest)
+            return self.heapify(node)
 
     def draw(self):
         space_counter = 2**(self.height + 2) - 1
