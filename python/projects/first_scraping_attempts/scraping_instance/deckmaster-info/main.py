@@ -3,9 +3,9 @@ import csv, pprint, time
 from bs4 import BeautifulSoup
 
 errors = [('edition', 'title', 'error')]
-set_code = 'OGW'
-edition = 'Oath of the Gatewatch'
-stopping_point = 'Deceiver of Form (001 Prerelease)'
+set_code = 'ORI'
+edition = 'Magic Origins'
+stopping_point = "Gideon's Phalanx (014 Prerelease)"
 
 
 try:
@@ -45,10 +45,11 @@ for li in page('li'):
         break
     lands = ['Forest', 'Mountain', 'Plains', 'Swamp', 'Island', 'Wastes']
     if not any(land == title.strip().split(' ')[0] for land in lands):
-        variation = title.split('(')[1].replace(')', '').strip()
+        title_array = title.split(" (")
+        variation = title_array[-1].replace(')', '').strip()
         title = title.split('(')[0].strip()
         if is_token:
-            title = title + "-token"
+            title = "{}-token-{}".format(title, variation)
         if ' '.join(title.strip().split(' ')[0:2]) == 'Eldrazi Scion-token':
             title = title + '-' + variation
         if title.strip().split(' ')[0] == 'Elemental-token':
