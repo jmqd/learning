@@ -110,11 +110,14 @@ class Pricer
         $analysis = $this->analyze($product)[0];
         if (!isset($analysis) or !is_object($analysis))
         {
-            return 'null';
+            return null;
         }
         $daily_qty_demanded = $analysis->daily_qty_demanded;
-        return round(.00000844613 * pow($daily_qty_demanded, 2)
-            + 0.0444213 * $daily_qty_demanded + 0.231015);
+        return $this->reprice(
+            $product,
+            round(.00000844613 * pow($daily_qty_demanded, 2)
+            + 0.0444213 * $daily_qty_demanded + 0.231015)
+        );
     }
 
 
