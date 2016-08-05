@@ -105,6 +105,62 @@ class Pricer
     }
 
 
+    public function suggest($product)
+    {
+        $analysis = $this->analyze($product)[0];
+        if (!isset($analysis) or !is_object($analysis))
+        {
+            return 'null';
+        }
+        $daily_qty_demanded = $analysis->daily_qty_demanded;
+        return round(.00000844613 * pow($daily_qty_demanded, 2)
+            + 0.0444213 * $daily_qty_demanded + 0.231015);
+    }
+
+
+    private function analyze($product)
+    {
+        $result = Database::instance()->query(
+            "select
+              name,
+              volume,
+              repriced_on,
+              net_since_reprice,
+              -1 * (net_since_reprice / time_to_sec(timediff(now(), repriced_on))*24*60*60) as daily_qty_demanded,
+              qty / case when (net_24 + net_48 + net_72) < 0 then abs((net_24 + net_48 + net_72) / 3) else 0 end as `days_in_stock`,
+              (net_24 + net_48 + net_72) `sum`,
+              net_24,
+              net_48,
+              net_72
+            from (
+              select
+                p.name,
+                p.qty,
+                p.threshold,
+                sum(case when o.`order_date` between p.`repriced_on` and now() then case when li.is_selling = 1 then li.qty else li.qty * -1 end else 0 end) as `net_since_reprice`,
+                p.`repriced_on`,
+                sum(case when time_to_sec(timediff(now(), o.order_date)) < 24*60*60 then case when li.is_selling = 1 then li.qty else li.qty * -1 end else 0 end) as `net_24`,
+                sum(case when time_to_sec(timediff(now(), o.order_date)) between 24*60*60 and 48*60*60 
+                    then case when li.is_selling = 1 then li.qty else li.qty * -1 end else 0 end) as `net_48`,
+                sum(case when time_to_sec(timediff(now(), o.order_date)) between 48*60*60 and 72*60*60
+                    then case when li.is_selling = 1 then li.qty else li.qty * -1 end else 0 end) as `net_72`,
+                sum(abs(li.qty)) as `volume`
+              from
+                lineitems li
+              inner join
+                orders o on li.order_id = o.id
+              inner join
+                products p on li.product_id = p.id
+              where
+                o.status not in ('canceled', 'cart')
+                and p.id = $product->id
+                and o.order_date > now() - interval 72 hour
+                and repriced_on != '0000-00-00 00:00:00'
+              group by p.id
+                ) as `raw_data`");
+        return $result;
+    }
+
     private function instantiate($product)
     {
         $this->prices = $this->config['prices_array'];
