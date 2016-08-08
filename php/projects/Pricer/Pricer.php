@@ -164,14 +164,14 @@ class Pricer
         return $result;
     }
 
+
     private function instantiate($product)
     {
-        $this->prices = $this->config['prices_array'];
         $this->discrete_increment = null;
         $price_floor_index = array_search(
             $this->rarity_floors[$product->cfields->rarity],
-            $this->prices);
-        $this->prices = array_slice($this->prices, $price_floor_index);
+            $this->config['prices_array']);
+        $this->prices = array_slice($this->config['prices_array'], $price_floor_index);
         $this->array_size = count($this->prices);
     }
 
