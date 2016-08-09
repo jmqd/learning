@@ -1,4 +1,6 @@
-import Node, math, sys, queue, operator
+import Node, math, queue, logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class Heap:
 
@@ -21,7 +23,7 @@ class Heap:
 
 
     def build(self):
-        for i in range (self.size - 1, 0, -1):
+        for i in range (self.size -1, -1, -1):
             if self.tree[i].has_children():
                 self.heapify(self.tree[i])
 
@@ -65,6 +67,10 @@ class Heap:
 
     def swap(self, active, passive):
         i, j = active.get_index(), passive.get_index()
+        logging.info('swapping ({}, {}) with ({}, {})'.format(i,
+                                                               active.get_value(),
+                                                               j,
+                                                               passive.get_value()))
         self.tree[i], self.tree[j] = self.tree[j], self.tree[i]
         active.set_index(j)
         passive.set_index(i)

@@ -1,10 +1,7 @@
 import Heap, pprint, random
 
 keywords = {
-    'data': (1, 5, 22, 33, 14, 9, 6, 7, 4, 3),
+    'data': (1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
         }
 heap = Heap.Heap(**keywords)
-heap.insert(55)
-heap.insert(100)
-heap.insert(22)
 heap.draw()
