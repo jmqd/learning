@@ -15,14 +15,6 @@ class Node:
         return self.heap.get_node((self.index - 1) // 2)
 
     def left(self):
-        if self.heap.size < 2 * self.index:
-            return self.heap.tree[2 * self.index]
-
-    def right(self):
-        if self.heap.size < 2 * self.index + 1:
-            return self.heap.tree[2 * self.index + 1]
-
-    def left(self):
         return self.heap.get_node(2 * self.index + 1)
 
     def right(self):
@@ -30,9 +22,6 @@ class Node:
 
     def set_index(self, index):
         self.index = index
-
-    def set_value(self, value):
-        self.value = value
 
     def has_children(self):
         if self.left() or self.right():
@@ -81,14 +70,14 @@ class Node:
     def is_left(self):
         if self.is_root():
             return False
-        if self.index & 1:
+        if self.index & 1 == 0:
             return False
         return True
 
     def is_right(self):
         if self.is_root():
             return False
-        if not self.index & 1:
+        if not self.index & 1 == 0:
             return False
         return True
 
