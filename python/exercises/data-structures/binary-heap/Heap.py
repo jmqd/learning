@@ -84,6 +84,7 @@ class Heap:
 
     def heapify(self, node, going_up = False):
         if not node:
+            logging.info('Node was false; passing on heapify.')
             return
         logging.info('heap-checking: (i: {}, v: {})'.format(node.get_index(), node.get_value()))
         largest = node.largest_child()
@@ -93,6 +94,7 @@ class Heap:
             self.swap(node, largest)
             if going_up:
                 if node.is_root():
+                    logging.info('Node is root; heapify is complete.')
                     return
                 return self.heapify(largest.parent(), going_up = True)
             return self.heapify(node)
