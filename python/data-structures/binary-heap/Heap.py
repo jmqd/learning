@@ -1,4 +1,4 @@
-import Node, math, queue, logging
+import Node, math, logging
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -9,7 +9,6 @@ class Heap:
         data = kwargs.pop('data', ())
         self.type = kwargs.pop('type', 'max')
         self.tree = []
-        self.queue = queue.Queue()
         if data:
             self.size = len(data)
             self.height = math.floor(math.log(self.size, 2))
@@ -39,16 +38,17 @@ class Heap:
             'heap': self,
             }
         node = Node.Node(**keywords)
+        logging.info('inserting node (index: {}, value: {})'.format(node.get_index(),
+                                                                    node.get_value()))
         self.tree.append(node)
         self.refresh()
-        self.heapify(node.parent())
-        self.heapify(node)
-        return self
+        self.heapify(node.parent(), going_up = True)
 
 
     def refresh(self):
         self.size = len(self.tree)
         self.height = math.floor(math.log(self.size, 2))
+        logging.info('Refreshed Heap: size: {}, height: {}'.format(self.size, self.height))
 
 
     def get_node(self, index):
@@ -59,18 +59,12 @@ class Heap:
         return self.tree[index]
 
 
-    def resolve_queue(self):
-        while not self.queue.empty():
-            node = self.queue.get()
-            self.heapify(node)
-
-
     def swap(self, active, passive):
         i, j = active.get_index(), passive.get_index()
         logging.info('swapping ({}, {}) with ({}, {})'.format(i,
-                                                               active.get_value(),
-                                                               j,
-                                                               passive.get_value()))
+                                                              active.get_value(),
+                                                              j,
+                                                              passive.get_value()))
         self.tree[i], self.tree[j] = self.tree[j], self.tree[i]
         active.set_index(j)
         passive.set_index(i)
@@ -81,32 +75,30 @@ class Heap:
 
 
     def delete(self, node):
+        logging.info('deleting node ({}, {})'.format(node.get_index(), node.get_value()))
         index = node.get_index()
         self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
         self.refresh()
         self.heapify(self.tree[index])
 
-    def correct(self, node):
-        if node.largest_child() and node.largest_child().get_value() > node.get_value():
-            node = self.heapify(node)
-        while node.parent() and node.parent().get_value() < node.get_value():
-            self.queue.put(node.parent())
-            if node.get_sibling() and node.get_sibling().get_value() > node.get_value():
-                node = node.get_sibling()
-            self.swap(node.parent(), node)
-            if node.is_root():
-                break
-
-    def heapify(self, node):
+    def heapify(self, node, going_up = False):
+        if not node:
+            return
+        logging.info('heap-checking: (i: {}, v: {})'.format(node.get_index(), node.get_value()))
         largest = node.largest_child()
         if not largest:
             return
         if largest.get_value() > node.get_value():
             self.swap(node, largest)
+            if going_up:
+                if node.is_root():
+                    return
+                return self.heapify(largest.parent(), going_up = True)
             return self.heapify(node)
 
     def draw(self):
+        logging.info('drawing heap tree...')
         space_counter = 2**(self.height + 2) - 1
         string = ""
         node_i = 0
