@@ -1,4 +1,16 @@
+
+abstract class AbstractBuilding {
+
+}
+
+
+
+
+
+
+
 // AbstractBuilding.h
+
 #ifndef AbstractBuilding_H
 #define AbstractBuilding_H
 

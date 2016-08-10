@@ -1,6 +1,7 @@
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
+
 class Node:
 
     def __init__(self, **kwargs):

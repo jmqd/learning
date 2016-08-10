@@ -1,6 +1,6 @@
 import Node, math, logging
-
 logging.basicConfig(level=logging.DEBUG)
+
 
 class Heap:
 
