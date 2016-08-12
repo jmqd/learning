@@ -33,24 +33,27 @@ class Graph:
             distance += 1
             for neighbor in node.get_neighbors():
                 if not self.graph[neighbor].is_discovered():
+                    logging.info('discovered {}'.format(neighbor))
                     self.graph[neighbor].discover().set_distance(distance)
                     self.graph[neighbor].set_parent(node)
                     if self.graph[neighbor].name == end:
                         return (True,
                                 distance,
-                                self.path_to(self.graph[start],
+                                self._path_to(self.graph[start],
                                              self.graph[neighbor]))
                     queue.put(self.graph[neighbor])
         return (False, None)
 
 
-    def path_to(self, start, node):
+    def _path_to(self, start, node):
         path = []
         path.append(node.name)
+        logging.info('Added {} to path'.format(node.name))
         parent = node.get_parent()
-        while node.get_parent() != start:
+        while parent != start:
+            logging.info('Added {} to path'.format(parent.name))
             path.append(parent.name)
-            parent = self.graph[node.parent()]
+            parent = parent.get_parent()
         path.append(start.name)
         return list(reversed(path))
 
