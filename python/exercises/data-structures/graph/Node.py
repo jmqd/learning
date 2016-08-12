@@ -5,6 +5,7 @@ class Node:
         self.discovered = False
         self.distance = None
         self.neighbors = neighbors
+        self.parent = None
 
     def is_discovered(self):
         return self.discovered
@@ -17,8 +18,14 @@ class Node:
         self.distance = distance
         return self
 
+    def get_parent(self):
+        return self.parent
+
     def get_neighbors(self):
         return self.neighbors
+
+    def set_parent(self, parent):
+        self.parent = parent
 
     def has(self, neighbor):
         if neighbor in self.neighbors():

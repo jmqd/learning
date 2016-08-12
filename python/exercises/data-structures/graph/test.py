@@ -13,4 +13,4 @@ graph = Graph(dictionary)
 for node in graph.graph.values():
     print(node.get_neighbors())
 graph.show()
-print(graph.search('cat', 'cat'))
+print(graph.search('cat', 'pat'))
