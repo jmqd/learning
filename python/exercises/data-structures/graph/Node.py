@@ -11,6 +11,11 @@ class Node:
 
     def discover(self):
         self.discovered = True
+        return self
+
+    def set_distance(self, distance):
+        self.distance = distance
+        return self
 
     def get_neighbors(self):
         return self.neighbors

@@ -21,16 +21,22 @@ class Graph:
         self.reset_graph()
         self.graph[start].discover()
         queue = Queue()
+        distance = 0
+        if start == end:
+            self.graph[start].set_distance(distance)
+            return (True, distance)
         queue.put(self.graph[start])
         while not queue.empty():
             node = queue.get()
+            distance += 1
             for neighbor in node.get_neighbors():
                 if not self.graph[neighbor].is_discovered():
                     self.graph[neighbor].discover()
+                    self.graph[neighbor].set_distance(distance)
                     if self.graph[neighbor].name == end:
-                        return True
+                        return (True, distance)
                     queue.put(self.graph[neighbor])
-        return False
+        return (False, None)
 
 
     def reset_graph(self):
