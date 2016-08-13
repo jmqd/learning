@@ -18,27 +18,29 @@ class Graph:
 
 
     def search(self, start, end):
-        logging.info('Searching for path to {} from {}'.format(end, start))
+        logging.info('Searching for path from {} to {}'.format(start, end))
         self.reset_graph()
         self.graph[start].discover()
         queue = Queue()
-        distance = 0
+        root = self.graph[start]
+        root.set_distance(0)
         if start == end:
-            self.graph[start].set_distance(distance)
-            path = start
-            return (True, distance, path)
-        queue.put(self.graph[start])
+            # make sure to create method on node to get path
+            # and implement it here.
+            return root
+        root = self.graph[start]
+        root.set_distance(0)
+        queue.put(root)
         while not queue.empty():
             node = queue.get()
-            distance += 1
             for neighbor in node.get_neighbors():
                 if not self.graph[neighbor].is_discovered():
                     logging.info('discovered {}'.format(neighbor))
-                    self.graph[neighbor].discover().set_distance(distance)
+                    self.graph[neighbor].discover().set_distance(node.distance + 1)
                     self.graph[neighbor].set_parent(node)
                     if self.graph[neighbor].name == end:
                         return (True,
-                                distance,
+                                self.graph[neighbor].distance,
                                 self._path_to(self.graph[start],
                                              self.graph[neighbor]))
                     queue.put(self.graph[neighbor])
