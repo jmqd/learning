@@ -1,3 +1,7 @@
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+
 class Node:
 
     def __init__(self, **kwargs):
@@ -23,9 +27,6 @@ class Node:
     def set_index(self, index):
         self.index = index
 
-    def set_value(self, value):
-        self.value = value
-
     def has_children(self):
         if self.left() or self.right():
             return True
@@ -41,10 +42,12 @@ class Node:
 
     def is_root(self):
         if self.index == 0:
+            logging.info('Node: Node is root.')
             return True
 
     def is_leaf(self):
         if len(self.children()) == 0:
+            logging.info('Node: Node is leaf.')
             return True
         return False
 
@@ -73,20 +76,21 @@ class Node:
     def is_left(self):
         if self.is_root():
             return False
-        if self.index & 1:
+        if self.index & 1 == 0:
             return False
         return True
 
     def is_right(self):
         if self.is_root():
             return False
-        if not self.index & 1:
+        if not self.index & 1 == 0:
             return False
         return True
 
 
     def largest_child(self):
         if self.is_leaf():
+            logging.info('Node: Node is leaf -- node has no children.')
             return False
         if not self.left():
             if self.right():
