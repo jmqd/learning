@@ -5,27 +5,26 @@ logging.basicConfig(level=logging.DEBUG)
 class Node:
 
     def __init__(self, **kwargs):
-        self.index = kwargs.pop('index')
-        self.value = kwargs.pop('value')
+        self.__index = kwargs.pop('index')
+        self.__value = kwargs.pop('value')
         self.heap = kwargs.pop('heap')
 
-    def get_index(self):
-        return self.index
+    @property
+    def index(self):
+        return self.__index
 
-    def get_value(self):
-        return self.value
+    @property
+    def value(self):
+        return self.__value
 
     def parent(self):
-        return self.heap.get_node((self.index - 1) // 2)
+        return self.heap.node((self.__index - 1) // 2)
 
     def left(self):
-        return self.heap.get_node(2 * self.index + 1)
+        return self.heap.node(2 * self.__index + 1)
 
     def right(self):
-        return self.heap.get_node(2 * self.index + 2)
-
-    def set_index(self, index):
-        self.index = index
+        return self.heap.node(2 * self.__index + 2)
 
     def has_children(self):
         if self.left() or self.right():
@@ -41,7 +40,7 @@ class Node:
         return children
 
     def is_root(self):
-        if self.index == 0:
+        if self.__index == 0:
             logging.info('Node: Node is root.')
             return True
 
@@ -51,24 +50,29 @@ class Node:
             return True
         return False
 
-    def set_value(self, value):
+    @index.setter
+    def index(self, value):
+        self.__index = value
+
+    @value.setter
+    def value(self, value):
         if value == self.value:
-            self.value = value
+            self.__value = value
             return self
         if value > self.value:
-            self.value = value
+            self.__value = value
             self.heap.queue.put(self)
             return self
         if value < self.value:
-            self.value = value
+            self.__value = value
             self.heap.queue.put(self)
             return self
 
     def get_sibling(self):
-        if self.is_left() and self.index + 1 < self.heap.get_size():
-            return self.heap.tree[self.index + 1]
+        if self.is_left() and self.__index + 1 < self.heap.get_size():
+            return self.heap.tree[self.__index + 1]
         if self.is_right():
-            return self.heap.tree[self.index - 1]
+            return self.heap.tree[self.__index - 1]
         else:
             return None
 
@@ -76,14 +80,14 @@ class Node:
     def is_left(self):
         if self.is_root():
             return False
-        if self.index & 1 == 0:
+        if self.__index & 1 == 0:
             return False
         return True
 
     def is_right(self):
         if self.is_root():
             return False
-        if not self.index & 1 == 0:
+        if not self.__index & 1 == 0:
             return False
         return True
 
@@ -98,6 +102,6 @@ class Node:
         if not self.right():
             if self.left():
                 return self.left()
-        if self.left().get_value() > self.right().get_value():
+        if self.left().value > self.right().value:
             return self.left()
         return self.right()

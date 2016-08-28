@@ -27,10 +27,6 @@ class Heap:
                 self.heapify(self.tree[i])
 
 
-    def get_size(self):
-        return self.size
-
-
     def insert(self, value):
         keywords = {
             'index': self.size,
@@ -38,8 +34,8 @@ class Heap:
             'heap': self,
             }
         node = Node.Node(**keywords)
-        logging.info('inserting node (index: {}, value: {})'.format(node.get_index(),
-                                                                    node.get_value()))
+        logging.info('inserting node (index: {}, value: {})'.format(node.index,
+                                                                    node.value))
         self.tree.append(node)
         self.refresh()
         self.heapify(node.parent(), going_up = True)
@@ -51,7 +47,7 @@ class Heap:
         logging.info('Refreshed Heap: size: {}, height: {}'.format(self.size, self.height))
 
 
-    def get_node(self, index):
+    def node(self, index):
         if index > self.size - 1:
             return False
         if index < 0:
@@ -60,23 +56,21 @@ class Heap:
 
 
     def swap(self, active, passive):
-        i, j = active.get_index(), passive.get_index()
+        i, j = active.index, passive.index
         logging.info('swapping ({}, {}) with ({}, {})'.format(i,
-                                                              active.get_value(),
+                                                              active.value,
                                                               j,
-                                                              passive.get_value()))
+                                                              passive.value))
         self.tree[i], self.tree[j] = self.tree[j], self.tree[i]
-        active.set_index(j)
-        passive.set_index(i)
-
+        active.index, passive.index = j, i
 
     def find_max(self):
         return self.tree[0]
 
 
     def delete(self, node):
-        logging.info('deleting node ({}, {})'.format(node.get_index(), node.get_value()))
-        index = node.get_index()
+        logging.info('deleting node ({}, {})'.format(node.index, node.value))
+        index = node.index
         self.swap(node, self.tree[self.size - 1])
         self.tree.pop()
         self.refresh()
@@ -86,11 +80,11 @@ class Heap:
         if not node:
             logging.info('Node was false; passing on heapify.')
             return
-        logging.info('heap-checking: (i: {}, v: {})'.format(node.get_index(), node.get_value()))
+        logging.info('heap-checking: (i: {}, v: {})'.format(node.index, node.value))
         largest = node.largest_child()
         if not largest:
             return
-        if largest.get_value() > node.get_value():
+        if largest.value > node.value:
             self.swap(node, largest)
             if going_up:
                 if node.is_root():
@@ -109,9 +103,9 @@ class Heap:
             space_counter //= 2
             string += " " * space_counter
             for i in range(0, 2**height):
-                if not self.get_node(node_i):
+                if not self.node(node_i):
                     break
-                string += str(self.get_node(node_i).get_value())
+                string += str(self.node(node_i).value)
                 if node_i != 0 and i + 1 != 2**height:
                     string += space_between
                 node_i += 1
