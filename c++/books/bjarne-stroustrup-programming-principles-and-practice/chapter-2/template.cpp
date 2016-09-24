@@ -1,5 +1,6 @@
-// A small template for the first few chapters of the book to save time.
-// It may be the case that some of these includes are unnecessary.
+// This file was constructed from a template designed for the first few
+// chapters of the book to save time. It may be the case that some of these
+// includes are unnecessary. That's okay.
 
 #include<iostream>
 #include<string>
