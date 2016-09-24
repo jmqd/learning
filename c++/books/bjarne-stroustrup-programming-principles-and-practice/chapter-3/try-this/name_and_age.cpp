@@ -18,5 +18,6 @@ int main()  // C++ programs start by executing the main function
     std::cin >> first_name;
     std::cout << "Please enter your age.\n";
     std::cin >> age;
-    std::cout << "Hello, " << first_name << " (age " << age << ")\n";
+    int age_in_mo = age * 12;
+    std::cout << "Hello, " << first_name << " (age " << age_in_mo << ")\n";
 }
