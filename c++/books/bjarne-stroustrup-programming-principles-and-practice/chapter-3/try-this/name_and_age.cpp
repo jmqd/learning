@@ -13,11 +13,11 @@ int main()  // C++ programs start by executing the main function
 {
     // vars
     std::string first_name = "";
-    int age = 0;
+    // double for kids who are very proud of being five and a half
+    double age = 0;
     std::cout << "Please enter your name.\n";
     std::cin >> first_name;
     std::cout << "Please enter your age.\n";
     std::cin >> age;
-    int age_in_mo = age * 12;
-    std::cout << "Hello, " << first_name << " (age " << age_in_mo << ")\n";
+    std::cout << "Hello, " << first_name << " (age " << age << ")\n";
 }
