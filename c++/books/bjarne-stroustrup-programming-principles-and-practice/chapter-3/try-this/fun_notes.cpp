@@ -22,4 +22,12 @@ int main()  // C++ programs start by executing the main function
     int result = a / b * b + a % b;
     std::cout << "a / b * b + a \% b == " << result << '\n';
     std::cout << "equality test: "  << (a == result) << '\n';
+    std::cout << "\n\n";
+    std::cout << "Char to int conversion notes:\n";
+
+    char c1 = 'x';
+    int i1 = c1;
+    int i2 = 'x';
+    char c2 = i1;
+    std::cout << c1 << i1 << c2 << '\n';
 }
