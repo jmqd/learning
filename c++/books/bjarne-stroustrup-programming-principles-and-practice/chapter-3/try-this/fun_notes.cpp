@@ -29,5 +29,13 @@ int main()  // C++ programs start by executing the main function
     int i1 = c1;
     int i2 = 'x';
     char c2 = i1;
-    std::cout << c1 << i1 << c2 << '\n';
+    bool boolean = false;
+    int i3 = boolean;
+    char c3 = boolean;
+    std::cout << "Char conversions:\n";
+    std::cout << "'" << c1 << "'" << " to int: " << i1 << '\n';
+    std::cout << "'" << i1 << "'" << " to char: " << c2 << '\n';
+    std::cout << "Bool conversions:\n";
+    std::cout << "bool " << boolean << " to int: " << i3 << '\n';
+    std::cout << "bool " << boolean << " to char: " << c3 << '\n';
 }
