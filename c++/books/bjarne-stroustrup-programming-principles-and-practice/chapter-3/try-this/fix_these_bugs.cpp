@@ -9,9 +9,9 @@
 #include<cmath>
 inline void keep_open() {char ch; std::cin >> ch;}
 
-int Main()  // C++ programs start by executing the main function
+int main()  // C++ programs start by executing the main function
 {
-    STRING s = "Goodbye cruel world!";
-    cOut << S << "\n";
+    std::string s = "Goodbye cruel world!";
+    std::cout << s << "\n";
 }
 
