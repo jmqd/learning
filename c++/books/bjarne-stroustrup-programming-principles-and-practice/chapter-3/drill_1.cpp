@@ -1,4 +1,7 @@
 // Write a program that is a naive letter generator.
+//
+// TODO:
+//  - make it to accept whole line of input.
 
 #include<iostream>
 #include<string>
