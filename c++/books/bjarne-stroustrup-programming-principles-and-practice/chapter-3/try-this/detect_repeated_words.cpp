@@ -13,10 +13,14 @@ int main()  // C++ programs start by executing the main function
 {
     std::string previous = " "; // previous word; initialized to "not a word"
     std::string current;
+    int word_index = 0;
     while (std::cin >> current) {
         if (previous == current) {
+            std::cout << "at word index " << word_index << ":\n";
             std::cout << "repeated word: " << current << "\n";
         }
+        ++word_index;
         previous = current;
     }
 }
+
