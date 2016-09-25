@@ -18,8 +18,8 @@ int main()  // C++ programs start by executing the main function
     std::cout << "let b = ";
     std::cin >> b;
     std::cout << "Doing a / b * b + a \% b...\n";
-    std::cout << "a: " << a << std::endl << "b: " << b << std::endl;
+    std::cout << "a: " << a << '\n' << "b: " << b << '\n';
     int result = a / b * b + a % b;
-    std::cout << "a / b * b + a \% b == " << result << std::endl;
-    std::cout << "equality test: "  << (a == result) << std::endl;
+    std::cout << "a / b * b + a \% b == " << result << '\n';
+    std::cout << "equality test: "  << (a == result) << '\n';
 }
