@@ -17,7 +17,7 @@ int main()  // C++ programs start by executing the main function
     while (std::cin >> current) {
         if (previous == current) {
             std::cout << "at word index " << word_index << ":\n";
-            std::cout << "repeated word: " << current << "\n";
+            std::cout << "repeated word: " << current << '\n';
         }
         ++word_index;
         previous = current;
