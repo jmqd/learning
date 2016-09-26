@@ -28,7 +28,7 @@ int main()
     std::getline(std::cin, name);
     std::cout << "When did you last see them?\n";
     std::getline(std::cin, last_seen);
-    std::cout << "Beginning with a verb, desribe an"
+    std::cout << "Beginning with a verb, desribe an "
         "activity you'd like to suggest:\n";
     std::getline(std::cin, activity);
     std::cout << "Who is a mutual friend?\n";
@@ -44,6 +44,23 @@ int main()
     // processing
     std::string friend_pronoun = (friend_sex == "M") ? "he" : "she";
     friend_age_int = std::stoi(friend_age, nullptr, 10);
+    std::string extra_phrase = "";
+    
+    switch (friend_age_int)
+    {
+        case 17:
+            extra_phrase = "Next year, " + friend_pronoun
+                + " will be able to vote!";
+            break;
+        case 20:
+            extra_phrase = "Next year, " + friend_pronoun
+                + " will be able to drink.";
+            break;
+        case 67:
+            extra_phrase = "Next year, " + friend_pronoun
+                + " will be enjoying lavish retirement.";
+            break;
+    }
 
     std::string letter_contents = "Dear " + name + ",\n\n"
         "It has been " + last_seen + " since I've seen you.\n"
@@ -51,7 +68,7 @@ int main()
         "\nHave you seen " + mutual_friend + " lately? I hope"
         " " + friend_pronoun + " is doing well.\nI heard " + friend_pronoun +
         " is turning " + std::to_string(friend_age_int + 1)
-        + " next year...\n\n\n"
+        + " next year... " + extra_phrase + "\n\n\n" +
         "In any event, yours truly,\n\n" + author_name + '\n';
     std::cout << letter_contents;
 }
