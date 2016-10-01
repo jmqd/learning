@@ -1,7 +1,4 @@
-// Write a program that is a naive letter generator.
-//
-// TODO:
-//  - make it to accept whole line of input.
+// Odd or even exercise
 
 #include<iostream>
 #include<string>
