@@ -1,3 +1,3 @@
 # c++
-### Learning c++11 std.
-##### Everything compiled with g++ -std=c++11 unless otherwise noted.
+### Learning c++14 std.
+##### Everything compiled with g++ -std=c++14 unless otherwise noted.
