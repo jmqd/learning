@@ -19,6 +19,7 @@ Ex: `constexpr double pi = 3.14159265358979`
 
 ### _Avoid literals. Use constants with descriptive names._
 
+---
 
 ## Operators
 
