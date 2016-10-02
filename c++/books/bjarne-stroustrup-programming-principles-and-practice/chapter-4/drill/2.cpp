@@ -4,16 +4,43 @@
 #include<algorithm>
 #include<cmath>
 
+constexpr double inch_to_cm = 2.54;
+constexpr double m_to_cm = 100;
+constexpr double ft_to_cm = 12 * inch_to_cm;
+
+
+double get_cm(double amount, char unit)
+{
+    switch (unit)
+    {
+        case 'c':
+            return amount;
+            break;
+        case 'i':
+            return inch_to_cm * amount;
+            break;
+        case 'm':
+            return amount * m_to_cm;
+            break;
+        case 'f':
+            return amount * ft_to_cm;
+            break;
+        default:
+            return 0.0;
+    }
+}
+
 int main()
 {
     bool first_iter = true;
-    double input = 0;
+    char unit = '\0';
+    double amount = 0;
     double largest = 0;
     double smallest = 0;
 
-    while (std::cin >> input)
+    while (std::cin >> amount >> unit)
     {
-        if (input == '|')
+        if (amount == '|')
         {
             break;
         }
@@ -21,21 +48,21 @@ int main()
         {
             if (first_iter)
             {
-                largest = input;
-                smallest = input;
+                largest = get_cm(amount, unit);
+                smallest = get_cm(amount, unit);
                 first_iter = false;
             }
 
 
-            if (input > largest)
+            if (get_cm(amount, unit) > largest)
             {
-                largest = input;
-                std::cout << "largest so far\n";
+                largest = get_cm(amount, unit);
+                std::cout << amount << ' ' <<  unit << " is largest so far\n";
             }
-            if (input < smallest)
+            if (get_cm(amount, unit) < smallest)
             {
-                smallest = input;
-                std::cout << "smallest so far\n";
+                smallest = get_cm(amount, unit);
+                std::cout << amount << ' ' << unit << " is smallest so far\n";
             }
         }
     }
