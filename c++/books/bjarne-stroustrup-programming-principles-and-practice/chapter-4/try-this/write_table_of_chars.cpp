@@ -14,5 +14,15 @@ int main()
         ++letter;
         ++letter_int;
     }
+
+    // another way...
+
+    letter = 'A';
+
+    for (int i = 0; i < 26; ++i)
+    {
+        std::cout << letter << '\t' << int(letter) << '\n';
+        ++letter;
+    }
 }
 
