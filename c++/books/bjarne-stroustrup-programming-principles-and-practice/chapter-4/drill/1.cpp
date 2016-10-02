@@ -6,9 +6,9 @@
 
 int main()
 {
-    int a = 0;
-    int b = 0;
-    std::vector<int> nums;
+    double a = 0;
+    double b = 0;
+    std::vector<double> nums;
 
     while (std::cin >> a >> b)
     {
