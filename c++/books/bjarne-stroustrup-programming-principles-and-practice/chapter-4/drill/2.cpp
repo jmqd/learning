@@ -44,6 +44,12 @@ int main()
         {
             break;
         }
+
+        if (unit != 'm' && unit != 'f' && unit != 'i' && unit != 'c')
+        {
+            std::cout << "I don't recognize that unit. Please try again.\n";
+            continue;
+        }
         else
         {
             if (first_iter)
