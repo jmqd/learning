@@ -37,6 +37,7 @@ int main()
     double amount = 0;
     double largest = 0;
     double smallest = 0;
+    double total = 0.0;
 
     while (std::cin >> amount >> unit)
     {
@@ -70,6 +71,8 @@ int main()
                 smallest = get_cm(amount, unit);
                 std::cout << amount << ' ' << unit << " is smallest so far\n";
             }
+            total += get_cm(amount, unit);
+            std::cout << "Total meters seen so far: " << total / 100 << '\n';
         }
     }
 }
