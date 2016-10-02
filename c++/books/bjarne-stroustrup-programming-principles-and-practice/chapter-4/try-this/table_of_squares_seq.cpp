@@ -16,7 +16,7 @@ int main()
 {
     for (int i = 0; i < 100; ++i)
     {
-        std::cout << "\t" << i << "\t" << square(i) << "\n";
+        std::cout << '\t' << i << '\t' << square(i) << '\n';
     }
 }
 
