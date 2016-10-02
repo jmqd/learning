@@ -22,9 +22,6 @@ int main()
         "pounds = p\nyen = y\neuros = e\n"
         "\n> ";
     std::cin >> curr_type;
-    std::cout << "\nEnter the amount you have.\n> ";
-    std::cin >> amount;
-    
     switch (curr_type)
     {
         case 'p':
@@ -36,8 +33,13 @@ int main()
         case 'e':
             ratio = euro_usd;
             break;
+        default:
+            std::cout << "I don't have knowledge of that currency.";
+            return 0;
     }
+    std::cout << "\nEnter the amount you have.\n> ";
+    std::cin >> amount;
     answer = ratio * amount;
     std::cout << "In USD, " << amount << curr_type << " is $"
-        << std::to_string(answer) << "\n";
+        << std::to_string(answer) << '\n';
 }
