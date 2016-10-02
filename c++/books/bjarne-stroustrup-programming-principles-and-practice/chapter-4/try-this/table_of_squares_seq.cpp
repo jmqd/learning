@@ -1,6 +1,5 @@
-// This file was constructed from a template designed for the first few
-// chapters of the book to save time. It may be the case that some of these
-// includes are unnecessary. That's okay.
+// First program ran.
+// Originally written at Cambridge University on May 6th, 1949
 
 #include<iostream>
 #include<string>
@@ -8,10 +7,16 @@
 #include<algorithm>
 #include<cmath>
 
+int square(int i)
+{
+    return i * i;
+}
+
 int main()
 {
     for (int i = 0; i < 100; ++i)
     {
-        std::cout << "\t" << i << "\t" << i * i << "\n";
+        std::cout << "\t" << i << "\t" << square(i) << "\n";
     }
 }
+
