@@ -78,6 +78,7 @@ int main()
     }
     std::cout << "Total meters seen so far: " << total / 100 << '\n';
     std::cout << "here are all of the values that I've seen: \n";
+    std::sort(seen.begin(), seen.end());
     for (std::string i: seen)
     {
         std::cout << i << '\n'; 
