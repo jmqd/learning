@@ -44,4 +44,7 @@ Ex: `constexpr double pi = 3.14159265358979`
 - `a && b`: logical and | _result is bool_
 -  `a || b`: logical or | _result is bool_
 - `lval = a`: assignment | _not to be confused with ==_
-- `lval *= a`: compound assignment | _`lval = lval * a`; also for `/`,`%`,`+`,`-`
+- `lval *= a`: compound assignment | _`lval = lval * a`; also for `/`,`%`,`+`,`-`_
+
+---
+
