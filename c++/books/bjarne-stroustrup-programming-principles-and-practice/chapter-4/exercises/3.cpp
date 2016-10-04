@@ -48,12 +48,7 @@ double min(std::vector<double> values)
 
 double mean(std::vector<double> values)
 {
-    double rolling_sum = 0.0;
-    for (double i: values)
-    {
-        rolling_sum += i;
-    }
-    return rolling_sum / values.size();
+    return sum(values) / values.size();
 }
 
 int main()
@@ -66,6 +61,7 @@ int main()
         values.push_back(value);
     }
     
+    std::cout << "\nSum dist along route is: \t" << sum(values);
     std::cout << "\nMax dist is: \t" << max(values);
     std::cout << "\nMin dist is: \t" << min(values);
     std::cout << "\nMean dist is: \t" << mean(values);
