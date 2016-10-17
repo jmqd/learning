@@ -11,7 +11,35 @@
 #include<algorithm>
 #include<cmath>
 
+double calculate(double a, double b, char operand)
+{
+    switch(operand)
+    {
+    case '+':
+        return a + b;
+        break;
+    case '-':
+        return a - b;
+        break;
+    case '/':
+        return a / b;
+        break;
+    case '*':
+        return a * b;
+        break;
+    default:
+        throw std::invalid_argument("Unknown operand");
+        break;
+    }
+}
+
 int main()
 {
-    // code here
+    char operand = '\0';
+    double a = 0,
+           b = 0;
+
+    std::cout << "Enter two numbers and an operand, RPN-style. > ";
+    std::cin >> a >> b >> operand;
+    std::cout << '\n' << calculate(a, b, operand) << '\n';
 }
