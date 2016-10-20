@@ -48,22 +48,21 @@ int calc_squares_required(int grains_desired)
     return i - 1;
 }
 
-int main()
+void render_answer(int grains_wanted, int squares_required)
 {
-    int input_num = 0;
-    std::cout << "Enter the chess square number to get its worth in rice. > ";
-    std::cin >> input_num;
-    std::cout << calc_square_worth(input_num) << '\n';
-
-    // case 1: 1,000,000 grains wanted
-    int grains_wanted = 1000000;
-    int squares_required = calc_squares_required(grains_wanted);
     std::cout << "In order to get at least " << grains_wanted << " grains of "
         "rice, " << squares_required << " squares are required.\n";
+}
 
-    // case 2: 1,000,000,000 grains wanted
-    grains_wanted = 1000000000;
-    squares_required = calc_squares_required(grains_wanted);
-    std::cout << "In order to get at least " << grains_wanted << " grains of "
-        "rice, " << squares_required << " squares are required.";
+int main()
+{
+    int grains_wanted = 0;
+    int squares_required = 0;
+    std::vector<int> cases_grains_wanted {1000, 1000000, 1000000000};
+
+    for (int grains_wanted: cases_grains_wanted)
+    {
+        squares_required = calc_squares_required(grains_wanted);
+        render_answer(grains_wanted, squares_required);
+    }
 }
