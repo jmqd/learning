@@ -1,4 +1,4 @@
-// There is an old story that the emperor wanted to thak the inventor
+// There is an old story that the emperor wanted to thank the inventor
 // of the game of chess and asked the inventor to name his reward.
 // The inventor asked for one grain of rice of the first square,
 // 2 for the second, 4 for the third, and so on, doubling for each
