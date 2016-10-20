@@ -15,7 +15,52 @@
 #include<regex>
 #include<map>
 
+int calc_square_worth(int square_num)
+{
+    // binary num
+    int grains_of_rice = 0b1;
+
+    // 2^n can be represented in binary as 1 with n trailing 0s.
+    // 2^0 -> 1 -> 0b1
+    // 2^1 -> 2 -> 0b10
+    // 2^2 -> 4 -> 0b100
+    // 2^3 -> 8 -> 0b1000
+    // 2^4 -> 16 -> 0b10000
+    // ...
+    // Each succesive increment of the exponent is equivalent to multiplying
+    // the previous term by 2. Appending a 0 to a binary number is also
+    // equivalent to multiplying that binary number by 2.
+    return grains_of_rice << (square_num - 1);
+}
+
+int calc_squares_required(int grains_desired)
+{
+    int i = 1;
+    int grains = 0;
+    while (grains < grains_desired)
+    {
+        grains += calc_square_worth(i);
+        ++i;
+    }
+    return i - 1;
+}
+
 int main()
 {
+    int input_num = 0;
+    std::cout << "Enter the chess square number to get its worth in rice. > ";
+    std::cin >> input_num;
+    std::cout << calc_square_worth(input_num) << '\n';
 
+    // case 1: 1,000,000 grains wanted
+    int grains_wanted = 1000000;
+    int squares_required = calc_squares_required(grains_wanted);
+    std::cout << "In order to get at least " << grains_wanted << " grains of "
+        "rice, " << squares_required << " squares are required.\n";
+
+    // case 2: 1,000,000,000 grains wanted
+    grains_wanted = 1000000000;
+    squares_required = calc_squares_required(grains_wanted);
+    std::cout << "In order to get at least " << grains_wanted << " grains of "
+        "rice, " << squares_required << " squares are required.";
 }
