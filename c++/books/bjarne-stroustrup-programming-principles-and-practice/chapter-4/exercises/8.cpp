@@ -21,15 +21,15 @@ int calc_square_worth(int square_num)
     int grains_of_rice = 0b1;
 
     // 2^n can be represented in binary as 1 with n trailing 0s.
-    // 2^0 -> 1 -> 0b1
-    // 2^1 -> 2 -> 0b10
-    // 2^2 -> 4 -> 0b100
-    // 2^3 -> 8 -> 0b1000
-    // 2^4 -> 16 -> 0b10000
+    // 2^0 -> 1  ->  0b1
+    // 2^1 -> 2  ->  0b10
+    // 2^2 -> 4  ->  0b100
+    // 2^3 -> 8  ->  0b1000
+    // 2^4 -> 16 ->  0b10000
     // ...
     // Each succesive increment of the exponent is equivalent to multiplying
     // the previous term by 2. Appending a 0 to a binary number is also
-    // equivalent to multiplying that binary number by 2.
+    // equivalent to multiplying that binary number by 2. qed
     return grains_of_rice << (square_num - 1);
 }
 
