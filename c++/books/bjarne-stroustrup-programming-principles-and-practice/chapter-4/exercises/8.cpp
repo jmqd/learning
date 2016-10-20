@@ -15,6 +15,7 @@
 #include<regex>
 #include<map>
 
+
 int calc_square_worth(int square_num)
 {
     // binary num
@@ -27,9 +28,11 @@ int calc_square_worth(int square_num)
     // 2^3 -> 8  ->  0b1000
     // 2^4 -> 16 ->  0b10000
     // ...
-    // Each succesive increment of the exponent is equivalent to multiplying
-    // the previous term by 2. Appending a 0 to a binary number is also
-    // equivalent to multiplying that binary number by 2. qed
+    // 1. Incrementing n in the exponent term 2^n is equivalent to (2^n) * 2.
+    // 2. Let k = a binary number whose leftmost digit is 1 and all others 0.
+    // 3. Appending a 0 to k is equivalent to k - k + 2k.
+    // 4. From 3, appending a 0 to k is equivalent to 2*k.
+    // 5. Therefore: 2^(n) == 0b1 << n
     return grains_of_rice << (square_num - 1);
 }
 
