@@ -1,5 +1,5 @@
 // Create a program to find all the prime numbers from 1 to 100 using
-// the Sieve of Erathosthenes.
+// the Sieve of Eratosthenes.
 
 #include<iostream>
 #include<string>
@@ -19,7 +19,7 @@ int main()
     number_grid[0] = false;
     number_grid[1] = false;
 
-    // sieve of erathosthenes
+    // sieve of eratosthenes
     for (int i = 2; i < v_length; ++i)
     {
         if (number_grid[i])
