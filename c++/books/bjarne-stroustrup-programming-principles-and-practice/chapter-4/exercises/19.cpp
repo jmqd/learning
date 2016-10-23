@@ -16,5 +16,24 @@
 
 int main()
 {
+    std::vector<std::string> names;
+    std::vector<int> ages;
+    std::string name = "";
+    int age = 0;
 
+    std::cout << "\nBook of names and ages.\n";
+    std::cout << "===========================================================";
+    std::cout << "\nInput is terminated by entering END";
+    std::cout << "\nEnter some name age pairs, like so: Joe 5 Jordan 23 etc\n";
+    while (std::cin >> name && name != "END")
+    {
+        names.push_back(name);
+        std::cin >> age;
+        ages.push_back(age);
+    }
+
+    for (int i = 0; i < names.size(); ++i)
+    {
+        std::cout << names[i] << " is " << ages[i] << " years old.\n";
+    }
 }
