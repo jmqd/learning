@@ -1,7 +1,7 @@
 def functional_style(k, nums):
     print "Solving in \"functional\" style..."
     nums_filtered = list(filter(lambda x: x != k, nums))
-    return nums_filtered + [k for i in range(0, len(nums) - len(nums_filtered))]
+    return nums_filtered + [k for _ in range(0, len(nums) - len(nums_filtered))]
 
 def imperative_style(k, nums):
     print "Solving in \"imperative\" style..."
