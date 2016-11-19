@@ -8,3 +8,5 @@ scalable/secret_file.py
 _-
 reverse-geocode-natural-features/secrets.py
 *.out
+*.pyc
+*un~
