@@ -4,8 +4,6 @@
 // This is better than the brute-force algorithm. It is better in the best
 // and average cases, because it erases the lowest set bit in each iteration.
 // In effect, its runtime is O(m), where m is the number of set bits.
-//
-// O(n)
 
 #include<iostream>
 #include<string>
