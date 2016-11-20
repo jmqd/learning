@@ -6,7 +6,7 @@
 #include<vector>
 #include<iostream>
 
-bool is_prime(int num)
+bool is_prime(const int num)
 {
     if (num == 1) { return false; } 
     if (num == 2) { return true; }
