@@ -17,7 +17,7 @@
 // At first, I'll assume that I can use O(n) additional storage.
 // I will work to iterate on this solution later.
 
-double find_max_profit(std::vector<double>& prices)
+double find_max_profit(const std::vector<double>& prices)
 {
     double min_seen = std::numeric_limits<double>::max(),
            max_profit = std::numeric_limits<double>::min();
