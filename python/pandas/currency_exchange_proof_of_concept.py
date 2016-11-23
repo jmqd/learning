@@ -2,8 +2,6 @@ import quandl
 import pandas as pd
 import secret_file
 
-# yes, I know I published my API keys... we all type git push origin master
-# too quickly from time to time... needless to say, I have changed my api keys
 quandl.ApiConfig.api_key = secret_file.api_key
 quandl.ApiConfig.api_version = '2015-04-09'
 

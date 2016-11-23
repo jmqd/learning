@@ -1,12 +1,15 @@
 import datetime, quandl, secret_file, pandas as pd, csv, sys, pickle, argparse
 import numpy as np
 
-parser = argparse.ArgumentParser(description='Transform those currencies. :)')
-parser.add_argument('csv', type=str, help='csv of row_id, date, currency_code, amount')
-args = parser.parse_args()
-
 quandl.ApiConfig.api_key = secret_file.api_key
 quandl.ApiConfig.api_version = '2015-04-09'
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Transform those currencies. :)')
+    parser.add_argument('csv', type=str, help='csv of row_id, date, currency_code, amount')
+    args = parser.parse_args()
+    return args
+
 
 def load_tables():
     rate_table = {}
@@ -55,12 +58,17 @@ def transform(csv):
         output = np.vstack([output, [row_id, date, currency, amount, usd_amount]])
     return output
 
+def main():
+    args = parse_args()
+    with open(args.csv, 'r') as f:
+        reader = csv.reader(f)
+        csv = list(reader)
 
-with open(args.csv, 'r') as f:
-    reader = csv.reader(f)
-    csv = list(reader)
+    output = transform(csv)
+    print(output)
 
-output = transform(csv)
-print(output)
+    np.savetxt('transform.tsv', output, delimiter = '\t', fmt = '%10s', newline = '\n')
 
-np.savetxt('transform.tsv', output, delimiter = '\t', fmt = '%10s', newline = '\n')
+
+if __name__ == '__main__':
+    main()
