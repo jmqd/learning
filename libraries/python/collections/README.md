@@ -1,4 +1,4 @@
-# itertools study
+# collection study
 
 ---
 
