@@ -1,17 +1,14 @@
 // What is the largest prime factor of the number 600851475143?
 
-#include <iostream> // for cout and cin type of stuff
-#include <vector> // vector data structure -- full featured array
-#include <algorithm> // algorithm is for std::max_element
-#include <math.h> // math.h for fmod(), which is % for doubles
-
-using std::vector; // boilerplate declarations
-using std::cout;
-using std::max_element;
+#include<iostream> // for cout and cin type of stuff
+#include<vector> // vector data structure -- full featured array
+#include<algorithm> // algorithm is for std::max_element
+#include<math.h> // math.h for fmod(), which is % for doubles
 
 int main() 
 {
     double input = 600851475143; // the initial number 
+    std::cout << "Getting largest prime factor for " << input << '\n';
     std::vector<double> factors;
     double divisor = 2;
 
@@ -33,6 +30,6 @@ int main()
         }
     }
     int largest_prime_factor = *max_element(factors.begin(), factors.end());
-    cout << largest_prime_factor;
-    return largest_prime_factor;
+    std::cout << largest_prime_factor << '\n';
+    return 0;
 }
