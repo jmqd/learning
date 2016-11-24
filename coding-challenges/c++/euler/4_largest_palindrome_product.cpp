@@ -1,19 +1,16 @@
 // A palindromic number reads the same both ways. 
 // Find the largest palindrome made from the product of two 3-digit numbers.
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using std::vector;
-using std::max_element;
-using std::cout;
-using std::endl;
+#include<iostream>
+#include<vector>
+#include<algorithm>
 
 bool isPalindrome(int input);
 
 int main()
 {
+    std::cout << "Finding the largest palindrom made from the product of two"
+        " three digit numbers.\n";
     std::vector<int> palindromes; 
     for (int outer = 999; outer > 500; --outer)
     {
@@ -33,8 +30,8 @@ int main()
     }
 
     int answer = *std::max_element(palindromes.begin(), palindromes.end());
-    cout << answer;
-    return answer;
+    std::cout << answer << '\n';
+    return 0;
 }
 
 bool isPalindrome(int input) {
