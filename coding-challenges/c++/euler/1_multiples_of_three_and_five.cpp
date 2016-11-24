@@ -1,6 +1,5 @@
 // Find the sum of all the multiples of 3 or 5 below 1000.
-#include <iostream>
-using std::cout;
+#include<iostream>
 
 int main() {
     int sum = 0;
@@ -12,5 +11,5 @@ int main() {
         }
     }
     std::cout << sum;
-    return sum;
+    return 0;
 }
