@@ -8,12 +8,19 @@
 
 bool is_prime(const int num)
 {
-    if (num == 1) { return false; } 
-    if (num == 2) { return true; }
-
-    for (int i = 2; i * i <= num; ++i)
+    switch (num)
     {
-        if (num % i == 0) { return false; }
+        case 1:
+            return false; // 1 is excluded as a prime
+            break;
+        case 2:
+            return true; // 2 is a prime number
+            break;
+        default:
+            for (int i = 2; i * i <= num; ++i)
+            {
+                if (num % i == 0) { return false; }
+            }
     }
     return true;
 }
