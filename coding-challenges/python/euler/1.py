@@ -17,4 +17,5 @@ def solve(n):
     multiples = (x for x in range(n) if x % 3 == 0 or x % 5 == 0)
     return sum(multiples)
 
-main()
+if __name__ == '__main__':
+    main()
