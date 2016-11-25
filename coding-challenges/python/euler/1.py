@@ -3,13 +3,18 @@ Find the sum of all the multiples of 3 or 5 below 1000.
 """
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-n")
-args = parser.parse_args()
+def init():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n", '--up_to', help='The integer N up to which to' +
+            ' sum all multiples of 3 or 5.', required = True, type = int)
+    return parser.parse_args()
 
-end_of_range = int(args.n)
-sum = 0
-for integer in range(end_of_range):
-    if integer % 3 == 0 or integer % 5 == 0:
-        sum += integer
-print(sum)
+def main():
+    args = init()
+    print(solve(args.up_to))
+
+def solve(n):
+    multiples = (x for x in range(n) if x % 3 == 0 or x % 5 == 0)
+    return sum(multiples)
+
+main()
