@@ -195,7 +195,7 @@ def fibs():
     yield from map(add, fibs1, tail(fibs2))
 ```
 
-_Efficient, using the memoized values, but feels clunky..._
+_Fairly efficient, using the memoized values, but feels clunky..._
 
 #### _fourth iteration, getting more functional..._
 
