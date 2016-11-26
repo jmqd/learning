@@ -1,7 +1,7 @@
-import Graph, argparse, csv
+import Graph, argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--dictionary', default='dictionary.csv')
+parser.add_argument('-d', '--dictionary', default='dictionary.txt')
 args = parser.parse_args()
 
 def build_dictionary(words):
@@ -33,9 +33,9 @@ def is_chainable(string_1, string_2):
 def import_words(filename):
     words = []
     with open(filename, 'r') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            words.append(row[0])
+        lines = (line for line in f)
+        for row in lines:
+            words.append(row.strip())
     return words
 
 words = import_words(args.dictionary)
