@@ -11,13 +11,13 @@ class BST(object):
         stack.appendleft(self.root)
         while stack:
             node = stack[0]
-            if node.left and node.left.discovered == False:
+            if node.left and not node.left.discovered:
                 stack.appendleft(node.left)
                 node.left.discovered = True
             else:
                 print node.val
                 stack.popleft()
-                if node.right and node.right.discovered == False:
+                if node.right and not node.right.discovered:
                     stack.appendleft(node.right)
                     node.right.discovered = True
 
@@ -33,19 +33,16 @@ class BST(object):
             i = self.root
             while True:
                 if i.val < node.val:
-                    if i.right == None:
-                        i.right = node
-                        i.right.parent = i
-                        i.subnodes += 1
+                    if not i.right:
+                        i.attach(node)
+                        self.size += 1
                         break
                     else:
                         i = i.right
                 if i.val > node.val:
-                    if i.left == None:
-                        i.left = node
-                        i.left.parent = i
-                        i.subnodes += 1
+                    if not i.left:
+                        i.attach(node)
+                        self.size += 1
                         break
                     else:
                         i = i.left
-
