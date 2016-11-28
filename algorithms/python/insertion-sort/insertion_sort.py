@@ -27,3 +27,12 @@ def sort(arr):
 
         # insert the element
         arr[insertion_index + 1] = elem
+
+'''
+# Analysis
+
+_Loop Invariant:_
+    At the start of each iteration of the for loop (lines 12:29),
+    the subarry arr[0..i-1] consists of the elements originally in
+    arr[0..i-1], but in sorted order.
+'''
