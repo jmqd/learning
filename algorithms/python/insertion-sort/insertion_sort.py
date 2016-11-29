@@ -10,6 +10,9 @@ Notes:
 def sort(arr):
     '''Given an unsorted array, sort it.'''
     for i, elem in enumerate(arr):
+        # a single element is sorted (trivially)
+        if i == 0: continue
+
         # for each iteration, everything up to i is in order.
         # we need only find the correct spot for arr[i] (elem)
         # in the subarray [0..arr[i - 1]]
