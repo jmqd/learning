@@ -13,6 +13,14 @@ Solution:
 Gotcha:
     Make a set of the array, because we're looking for the second largest
     number, not the value of the element in the array ranked 2nd.
+
+Analysis:
+    Runtime:
+        O(n)
+        ~ theta(3n + 2)
+            - build_heap is a theta(n) time complexity algorithm (occurs once)
+            - list, set are linear at worst (occurs once each)
+            - max() of two elements is O(2)
 '''
 from __future__ import print_function
 import random # for testing
