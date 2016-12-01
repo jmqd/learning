@@ -1,6 +1,14 @@
 /*
  * Given an integer n, enumerate all primes up to n.
  * THIS IS THE INITIAL BRUTE FORCE SOLUTION.
+ *
+ * This algorithm performs sqrt(n) operations n times,
+ * so its time complexity is:
+ * O(n * sqrt(n))
+ * => O((n**1) * (n ** (1/2)))
+ * => O(n ** (3/2))
+ *
+ * Its space complexity: O(1)
  */
 
 #include<vector>

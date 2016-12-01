@@ -5,6 +5,8 @@
  *
  * After some reading, it seems the time complexity of this algorithm
  * is O(n log log n), although this is not obvious or trivial to me.
+ *
+ * Its space complexity is O(n).
  */
 
 #include<vector>
