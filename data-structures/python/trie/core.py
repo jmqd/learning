@@ -11,21 +11,19 @@ class Trie(object):
         for word_index, word in enumerate(self.words):
             node = self.root
             for i in xrange(0, len(word)):
-                if word[i] in node.successors:
-                    node = node.successors[word[i]]
-                else:
+                if word[i] not in node.successors:
                     node.add(word[i])
-                    node = node.successors[word[i]]
+                node = node.successors[word[i]]
             node.word = self.words[word_index]
+
 
     def check_exists(self, word):
         '''In the Trie, check if a given word exists.'''
         node = self.root
         for i in xrange(0, len(word)):
-            if word[i] in node.successors:
-                node = node.successors[word[i]]
-            else:
+            if word[i] not in node.successors:
                 return False
+            node = node.successors[word[i]]
         return True
 
 class Node(object):
