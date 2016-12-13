@@ -23,8 +23,18 @@ class Trie(object):
         for i in xrange(0, len(word)):
             if word[i] not in node.successors:
                 return False
-            node = node.successors[word[i]]
+            node = node.next(word[i])
         return True
+
+    def add(self, word):
+        '''Add a word to the Trie.'''
+        self.words.append(word)
+        node = self.root
+        for i in xrange(0, len(word)):
+            if word[i] not in node.successors:
+                node.add(word[i])
+            node = node.next(word[i])
+        node.word = self.words[-1]
 
 class Node(object):
     '''The nodes, which are characters in the english alphabet, [A-Za-z].'''
@@ -40,3 +50,6 @@ class Node(object):
         if char in self.successors:
             return
         self.successors[char] = Node(self, char)
+
+    def next(self, char):
+        return self.successors.get(char, None)
