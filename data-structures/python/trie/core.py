@@ -7,6 +7,7 @@ class Trie(object):
         self.build(words)
 
     def build(self, text):
+        '''Encapsulates all of the preprocessing build logic.'''
         for word_index, word in enumerate(self.words):
             node = self.root
             for i in xrange(0, len(word)):
@@ -18,6 +19,7 @@ class Trie(object):
             node.word = self.words[word_index]
 
     def check_exists(self, word):
+        '''In the Trie, check if a given word exists.'''
         node = self.root
         for i in xrange(0, len(word)):
             if word[i] in node.successors:
@@ -29,12 +31,14 @@ class Trie(object):
 class Node(object):
     '''The nodes, which are characters in the english alphabet, [A-Za-z].'''
     def __init__(self, predecessor, char):
+        '''Initialize node. Need its predecessor and the char it represents.'''
         self.char = char
         self.word = None
         self.predecessor = predecessor
         self.successors = dict()
 
     def add(self, char):
+        '''Add a char to a node. If it's already there, it doesn't bother.'''
         if char in self.successors:
             return
         self.successors[char] = Node(self, char)
