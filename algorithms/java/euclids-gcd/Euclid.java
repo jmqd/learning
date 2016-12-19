@@ -26,7 +26,7 @@ class Euclid {
             int b = testCases[i][1];
             int result = greatestCommonDivisor(a, b);
             assert result == answers[i];
-            System.out.println("(" + a + ", " + b + ") -> " + result + "... PASS.");
+            System.out.println("(" + a + ", " + b + ") -> " + result);
         }
     }
 }
