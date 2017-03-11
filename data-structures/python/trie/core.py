@@ -2,7 +2,7 @@ class Trie(object):
     '''The main Trie object.'''
     def __init__(self, words):
         '''Takes the text given and creates a Trie.'''
-        self.root = Node(None, '^')
+        self.root = Node(None, '')
         self.words = words
         self.build(words)
 

@@ -39,13 +39,12 @@ def test_exists(trie, test_cases):
     print 'Testing existence of various words in Trie'
     print '=' * 79
     table = [[]] * len(test_cases)
-    index = 0
-    for k, v in test_cases.iteritems():
+    for index, d_tuple in enumerate(test_cases.iteritems()):
+        k, v = d_tuple
         check = trie.check_exists(k)
         status = 'PASS' if (v == check) else 'FAIL'
         table[index] = [k, status, v, check]
         assert v == check
-        index += 1
     print tabulate.tabulate(table,
             ['word', 'status', 'expected', 'actual'],
             tablefmt = 'fancy_grid')
