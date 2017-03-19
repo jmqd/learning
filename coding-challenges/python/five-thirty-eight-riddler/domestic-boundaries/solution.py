@@ -139,7 +139,9 @@ def plot_polygon(polygon, is_saving):
     p = PatchCollection(patches)
     ax.add_collection(p)
     plt.show()
-    fig.savefig('plot{}.png'.format(plot_polygon.img_saved_count))
+
+    if is_saving:
+        fig.savefig('plot{}.png'.format(plot_polygon.img_saved_count))
 
 
 def is_concave(polygon):
