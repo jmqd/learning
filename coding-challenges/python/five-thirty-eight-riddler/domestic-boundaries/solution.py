@@ -2,12 +2,17 @@ import random
 import math
 import itertools
 import logging
-import matplotlib.pyplot as plt
-import numpy as np
 import click
+
+import numpy as np
+import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
 
 logging.basicConfig(level=logging.INFO)
+
+LOWER_BOUND_HOUSE_LOCATION = 1
+UPPER_BOUND_HOUSE_LOCATION = 2
+NUMBER_OF_RANCHES = 4
 
 class Ranch:
     def __init(self):
@@ -15,7 +20,11 @@ class Ranch:
         self.house_location = None
 
     def build_house(self):
-        self.house_location = random.uniform(1, 2), random.uniform(1, 2)
+        rand1 = random.uniform(LOWER_BOUND_HOUSE_LOCATION,
+                               UPPER_BOUND_HOUSE_LOCATION)
+        rand2 = random.uniform(LOWER_BOUND_HOUSE_LOCATION,
+                               UPPER_BOUND_HOUSE_LOCATION)
+        self.house_location = rand1, rand2
         logging.info("Built a house for %s at %s", self, self.house_location)
 
     @staticmethod
@@ -28,16 +37,30 @@ class Ranch:
         return "Ranch object: house at: {}".format(self.house_location)
 
 class RanchGrid:
-    def __init__(self, ranches):
-        assert len(ranches) == 4
+    position_map = {
+            'top_left': (0, 0),
+            'top_right': (0, 1),
+            'bottom_right': (1, 1),
+            'bottom_left': (1, 0)
+            }
+    positions = ('top-left', 'top-right', 'bottom-right', 'bottom-left')
 
-        self.grid = [ranches[0:2], ranches[2:4]]
+    def __init__(self, ranches):
+        assert len(ranches) == NUMBER_OF_RANCHES
+        midpoint = NUMBER_OF_RANCHES // 2
+        print(midpoint)
+        self.grid = [ranches[0:midpoint],
+                     ranches[midpoint:NUMBER_OF_RANCHES]]
+
+    def getranch(self, pos):
+        indices = self.position_map[pos]
+        return self.grid[indices[0]][indices[1]]
 
     def get_polygon(self):
-        top_left = self.grid[0][0].house_location
-        top_right = self.grid[0][1].house_location
-        bottom_left = self.grid[1][0].house_location
-        bottom_right = self.grid[1][1].house_location
+        top_left = self.getranch('top_left').house_location
+        top_right = self.getranch('top_right').house_location
+        bottom_left = self.getranch('bottom_left').house_location
+        bottom_right = self.getranch('bottom_right').house_location
 
         top_left = top_left[0], top_left[1] + 1
         top_right = top_right[0] + 1, top_right[1] + 1
@@ -46,10 +69,9 @@ class RanchGrid:
         return top_left, top_right, bottom_right, bottom_left
 
     def __str__(self):
-        positions = ('top-left', 'top-right', 'bottom-right', 'bottom-left')
         polygon = self.get_polygon()
         message = ''
-        for i, p in enumerate(positions):
+        for i, p in enumerate(self.positions):
             message += p
             message += str(polygon[i])
             message += '\n'
@@ -76,7 +98,7 @@ def main(is_plotting=False, num_simulations=100):
 
 def simulate(is_plotting):
     '''Runs a single simulation of the problem.'''
-    ranches = [Ranch.make_ranch() for _ in range(0, 4)]
+    ranches = [Ranch.make_ranch() for _ in range(0, NUMBER_OF_RANCHES)]
     grid = RanchGrid(ranches)
     polygon = grid.get_polygon()
 
@@ -129,7 +151,7 @@ def is_concave(polygon):
     '''
     points = itertools.cycle(polygon)
 
-    for i in range(0, 4):
+    for i in range(0, len(polygon)):
         p1, p2, p3 = next(points), next(points), next(points)
         x, y = p1
         x2, y2 = p2
