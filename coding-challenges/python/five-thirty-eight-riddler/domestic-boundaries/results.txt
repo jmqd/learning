@@ -1,0 +1,2 @@
+In 10000000 simulations, found 906320 occurences of concave polgons.
+Estimated probability that the kids can walk from any given point in the field to any other point in a straight line, legally: 0.909368
