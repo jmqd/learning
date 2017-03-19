@@ -12,7 +12,7 @@ _Simulated by solution.py script._
 
 ## Results
 
-- In 10000000 simulations, found 906320 occurences of concave polgons.
+- In 10,000,000 simulations, found 906320 occurences of concave polgons.
 - Estimated/observed probability: 0.909368
 
 ## Animated gif of 100 simulations
