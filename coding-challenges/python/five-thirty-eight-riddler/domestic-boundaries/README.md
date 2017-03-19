@@ -25,3 +25,7 @@ _Simulated by solution.py script._
 
 [plots]: plots.gif "Animated Gif of Ranch Playground Polygon Simulations"
 
+## usage of solution.py
+
+`python3 solution.py [--num --plot --is_saving]`
+- `--num` defaults to `100`
