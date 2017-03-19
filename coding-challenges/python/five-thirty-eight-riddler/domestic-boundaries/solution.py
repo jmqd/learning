@@ -80,10 +80,11 @@ class RanchGrid:
 @click.command()
 @click.option('--plot', 'is_plotting', default=False, is_flag=True)
 @click.option('--num', 'num_simulations', default=100)
-def main(is_plotting=False, num_simulations=100):
+@click.option('--is_saving', default=False, is_flag = True)
+def main(is_plotting=False, num_simulations=100, is_saving=False):
     concave_polygon_count = 0
     for i in range(0, num_simulations):
-        result = simulate(is_plotting)
+        result = simulate(is_plotting, is_saving)
         if result:
             concave_polygon_count += 1
 
@@ -96,21 +97,28 @@ def main(is_plotting=False, num_simulations=100):
                 (num_simulations - concave_polygon_count) / num_simulations))
 
 
-def simulate(is_plotting):
+def simulate(is_plotting, is_saving):
     '''Runs a single simulation of the problem.'''
     ranches = [Ranch.make_ranch() for _ in range(0, NUMBER_OF_RANCHES)]
     grid = RanchGrid(ranches)
     polygon = grid.get_polygon()
 
     if is_plotting:
-        plot_polygon(polygon)
+        plot_polygon(polygon, is_saving)
 
     concavity = is_concave(polygon)
     return concavity
 
 
-def plot_polygon(polygon):
+def plot_polygon(polygon, is_saving):
     '''Useful for plotting the polygon during testing.'''
+    if is_saving:
+        try:
+            getattr(plot_polygon, 'img_saved_count')
+            plot_polygon.img_saved_count += 1
+        except AttributeError:
+            setattr(plot_polygon, 'img_saved_count', 1)
+
     data = np.array(polygon)
     polygon_plot = plt.Polygon(data)
 
@@ -131,6 +139,7 @@ def plot_polygon(polygon):
     p = PatchCollection(patches)
     ax.add_collection(p)
     plt.show()
+    fig.savefig('plot{}.png'.format(plot_polygon.img_saved_count))
 
 
 def is_concave(polygon):
