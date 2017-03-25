@@ -36,5 +36,8 @@ More about the numerical geometry algorithms here: https://www.cs.cmu.edu/~quake
 
 ## usage of solution.py
 
-`python3 solution.py [--num --plot --is_saving]`
+`python3 solution.py [--num --plot --is_saving --verbose]`
 - `--num` defaults to `100`
+- `--plot` defaults to `False`
+- `--is_saving` defaults to `False`
+- `--verbose` defaults to `False`
