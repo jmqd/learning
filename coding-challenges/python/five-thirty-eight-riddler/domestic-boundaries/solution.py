@@ -8,8 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import PatchCollection
 
-logging.basicConfig(level=logging.INFO)
-
 LOWER_BOUND_HOUSE_LOCATION = 1
 UPPER_BOUND_HOUSE_LOCATION = 2
 NUMBER_OF_RANCHES = 4
@@ -48,7 +46,6 @@ class RanchGrid:
     def __init__(self, ranches):
         assert len(ranches) == NUMBER_OF_RANCHES
         midpoint = NUMBER_OF_RANCHES // 2
-        print(midpoint)
         self.grid = [ranches[0:midpoint],
                      ranches[midpoint:NUMBER_OF_RANCHES]]
 
@@ -70,35 +67,36 @@ class RanchGrid:
 
     def __str__(self):
         polygon = self.get_polygon()
-        message = ''
-        for i, p in enumerate(self.positions):
-            message += p
-            message += str(polygon[i])
-            message += '\n'
-        return "RanchGrid:\n{}".format(message)
+        return 'RanchGrid:\n' + '\n'.join(p + str(polygon[i]) for i, p in enumerate(self.positions))
 
 @click.command()
 @click.option('--plot', 'is_plotting', default=False, is_flag=True)
 @click.option('--num', 'num_simulations', default=100)
 @click.option('--is_saving', default=False, is_flag = True)
-def main(is_plotting=False, num_simulations=100, is_saving=False):
+@click.option('--verbose', default=False, is_flag = True)
+def main(is_plotting=False, num_simulations=100, is_saving=False, verbose=False):
+    '''Program entry point --- mile-high view of program execution.'''
+    if verbose:
+        logging.basicConfig(level=logging.INFO)
+
     concave_polygon_count = 0
     for i in range(0, num_simulations):
-        result = simulate(is_plotting, is_saving)
-        if result:
+        convex = simulate(is_plotting, is_saving)
+        if not convex:
             concave_polygon_count += 1
-
-        print(i, result)
 
     print("In {} simulations, found {} occurences of concave polgons.".format(num_simulations,
                                                                               concave_polygon_count))
-    print("Estimated probability that the kids can walk from any given point in the field" +
-            " to any other point in a straight line, legally: {}".format(
+    print("Estimated likelihood that the children can travel in whatever" +
+            " straight line they please within their allowed area: {}".format(
                 (num_simulations - concave_polygon_count) / num_simulations))
 
 
 def simulate(is_plotting, is_saving):
-    '''Runs a single simulation of the problem.'''
+    '''Runs a single simulation of the problem.
+
+    Returns True if the kids can walk in any straight line.
+    '''
     ranches = [Ranch.make_ranch() for _ in range(0, NUMBER_OF_RANCHES)]
     grid = RanchGrid(ranches)
     polygon = grid.get_polygon()
@@ -106,13 +104,17 @@ def simulate(is_plotting, is_saving):
     if is_plotting:
         plot_polygon(polygon, is_saving)
 
-    concavity = is_concave(polygon)
-    return concavity
+    convex = is_convex(polygon)
+
+    if not convex:
+        logging.info("Found a grid with non-convex quadrilateral: {}".format(grid))
+    return convex
 
 
 def plot_polygon(polygon, is_saving):
     '''Useful for plotting the polygon during testing.'''
     if is_saving:
+        # a small hack to keep the state of # of saved imgs to avoid filename collision
         try:
             getattr(plot_polygon, 'img_saved_count')
             plot_polygon.img_saved_count += 1
@@ -144,8 +146,8 @@ def plot_polygon(polygon, is_saving):
         fig.savefig('plot{}.png'.format(plot_polygon.img_saved_count))
 
 
-def is_concave(polygon):
-    '''Given a polygon, which is just a tuple of (x,y) catesian points, return if it is concave.
+def is_convex(polygon):
+    '''Given a polygon, which is just a tuple of (x,y) catesian points, return if it is convex.
 
     Notes:
         This algorihm solves the problem of determining concavity in a clever way:
@@ -181,9 +183,12 @@ def is_concave(polygon):
         is_turning_left = cross_product >= 0
 
         if is_turning_left:
-            return True
+            logging.info("Found a cross product that isn't turning left: p1: {}, p2: {}, p3: {}".format(
+                p1, p2, p3))
+            return False
 
-    return False
+    logging.info("Walking the polygon, all turns seemed to be to the right, indicating convexity.")
+    return True
 
 
 if __name__ == '__main__':
