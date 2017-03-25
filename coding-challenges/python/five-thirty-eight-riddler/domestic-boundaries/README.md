@@ -14,6 +14,15 @@ What is the probability that the children are able to travel in a straight line 
 
 _Simulated by solution.py script._
 
+### General strategy of simulation:
+
+- Uniformly at random generate a point within each quadrant.
+- Starting from the "top left", moving clockwise, traverse the points, applying a numerical `orientation test` to check if the polygon formed from the four points is convex or not.
+- Repeat this process N times and compute the observed frequency of convex polygons.
+
+More about the numerical geometry algorithms here: https://www.cs.cmu.edu/~quake/robust.html
+
+
 ## Results
 
 - In 10,000,000 simulations, found 906320 occurences of concave polgons.
