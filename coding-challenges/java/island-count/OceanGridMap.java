@@ -14,25 +14,7 @@ class OceanGridMap {
         this.grid = grid;
     }
 
-    public int countIslandsNaive() {
-        int islandCount = 0;
-        for (int i = 0; i < this.grid.length; ++i) {
-            for (int j = 0; j < this.grid[i].length; ++j) {
-                if (i > 0 && this.grid[i - 1][j]) {
-                    continue;
-                }
-                if (j > 0 && this.grid[i][j - 1]) {
-                    continue;
-                }
-                if (this.grid[i][j]) {
-                    ++islandCount;
-                }
-            }
-        }
-        return islandCount;
-    }
-
-    private int countIslandsIfGridAllowedToMutate() {
+    private int countNumberOfIslands() {
         int islandCount = 0;
         for (int i = 0; i < this.grid.length; ++i) {
             for (int j = 0; j < this.grid[i].length; ++j) {
@@ -48,27 +30,19 @@ class OceanGridMap {
 
     private void deleteIslandDfs(Integer[] coordinates) {
         ArrayDeque<Integer[]> stack;
+        Integer[] landParcel;
+
         stack = new ArrayDeque<Integer[]>();
         stack.push(coordinates);
 
-        this.deleteIslandRecursive(stack);
-    }
+        while (!stack.isEmpty()) {
+            landParcel = stack.pop();
+            this.setCoord(landParcel, false);
 
-    private void deleteIslandRecursive(ArrayDeque<Integer[]> stack) {
-        if (stack.isEmpty()) {
-            return;
-        }
-
-        Integer[] coordinates = stack.pop();
-        this.setCoord(coordinates, false);
-
-        for (Integer[] neighbor : this.getNeighborsIfLand(coordinates)) {
-            if (this.isLand(neighbor)) {
+            for (Integer[] neighbor : this.getNeighborsIfLand(landParcel)) {
                 stack.push(neighbor);
             }
         }
-
-        this.deleteIslandRecursive(stack);
     }
 
     private boolean isLand(Integer[] coordinates) {
@@ -148,13 +122,7 @@ class OceanGridMap {
     public static void testGrid(boolean[][] grid, String name, int correctCount) {
         OceanGridMap oceanMap = new OceanGridMap(grid);
         System.out.println("Correct Count is: " + correctCount);
-        System.out.println("Naive test: " + name);
-        int naiveCount = oceanMap.countIslandsNaive();
-        System.out.println(naiveCount + " -- " + ((naiveCount == correctCount) ? "CORRECT" : "WRONG"));
-        oceanMap.printPrettyGrid();
-
-        System.out.println("DFS test: " + name);
-        int dfsCount = oceanMap.countIslandsIfGridAllowedToMutate();
+        int dfsCount = oceanMap.countNumberOfIslands();
         System.out.println(dfsCount + " -- " + ((dfsCount == correctCount) ? "CORRECT" : "WRONG"));
         oceanMap.printPrettyGrid();
     }
