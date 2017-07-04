@@ -12,3 +12,4 @@ reverse-geocode-natural-features/secrets.py
 *un~
 .idea*
 *.iml
+*.class
