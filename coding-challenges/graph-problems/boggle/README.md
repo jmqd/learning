@@ -23,7 +23,9 @@ a x
 
 In this simple 2x2 grid, you can make the following words:
 
-`car, ax, arc, a, rax`
+`'a', 'ax', 'car', 'x', 'ca', 'ac', 'arc', 'c', 'r'`
+
+- * This result is according to the en_US dictionary shipped w/ the python enchant library.
 
 ### The ask
 ---
