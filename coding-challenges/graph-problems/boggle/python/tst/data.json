@@ -5,5 +5,14 @@
             ["a", "x"]
         ],
         "correct_answer": ["a", "ax", "car", "x", "ca", "ac", "arc", "c", "r"]
+    },
+    "best_known_4x4": {
+        "board": [
+            ["G", "N", "E", "S"],
+            ["S", "R", "I", "P"],
+            ["E", "T", "A", "L"],
+            ["T", "S", "E", "B"]
+        ],
+        "correct_answer": []
     }
 }

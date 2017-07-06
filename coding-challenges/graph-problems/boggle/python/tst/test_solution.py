@@ -13,7 +13,7 @@ english_dictionary = enchant.Dict('en_US')
 def test_example_boards():
     test_data = load_json_file(TEST_DATA_FILENAME)
     for name, data in test_data.items():
-        assert solve(data['board'], english_dictionary.check) == data['correct_answer']
+        assert solve(data['board'], english_dictionary.check) == set(data['correct_answer'])
 
 def load_json_file(filename: str) -> Any:
     with open(filename, 'r') as f:
