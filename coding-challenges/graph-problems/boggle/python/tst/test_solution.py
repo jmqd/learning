@@ -1,15 +1,22 @@
 import sys
 import enchant
-from typing import List, Set
+import os
+import json
+from typing import List, Set, Any
 
-sys.path.insert('../src/')
+sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
 from solution import solve
 
-TEST_BOARDS_AND_SOLUTIONS_FILE = 'data.json'
-EXAMPLE_BOARDS = json.load(TEST_BOARDS_AND_SOLUTIONS_FILE)
-english_dictionary = enchant.dict('en_US')
+TEST_DATA_FILENAME = os.path.join(os.path.dirname(__file__), 'data.json')
+english_dictionary = enchant.Dict('en_US')
 
 def test_example_boards():
-    for name, data in TEST_DATA.items():
+    test_data = load_json_file(TEST_DATA_FILENAME)
+    for name, data in test_data.items():
         assert solve(data['board'], english_dictionary.check) == data['correct_answer']
+
+def load_json_file(filename: str) -> Any:
+    with open(filename, 'r') as f:
+        data = json.load(f)
+    return data
 

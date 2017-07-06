@@ -4,11 +4,6 @@
             ["c", "r"],
             ["a", "x"]
         ],
-        "correct_answer": [
-            "car",
-            "ax",
-            "a",
-            "arc"
-        ]
+        "correct_answer": ["a", "ax", "car", "x", "ca", "ac", "arc", "c", "r"]
     }
 }
