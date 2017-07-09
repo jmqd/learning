@@ -74,7 +74,7 @@ class MedianHeap:
                    len(self.upper)])
 
     @property
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.median is None and len(self.lower) == 0 and len(self.upper) == 0
 
     @property
@@ -103,9 +103,9 @@ class MedianHeap:
             else:
                 self.upper.push(value)
 
-        self.balance()
+        self.__balance()
 
-    def balance(self):
+    def __balance(self) -> None:
         while self.is_unbalanced:
             big_heap, small_heap = self.get_larger_heap(), self.get_smaller_heap()
             small_heap.push(self.median)
