@@ -16,10 +16,9 @@ def main() -> None:
         except Exception as e:
             print(e)
 
-
 def preprocess(line: List[int]) -> List[int]:
-    left_high_tides = get_high_tides(line)
-    right_high_tides = list(reversed(get_high_tides(reversed(line))))
+    left_high_tides = find_high_tides(line)
+    right_high_tides = list(reversed(find_high_tides(reversed(line))))
     high_tides = []
 
     for i, height in enumerate(line):
@@ -31,7 +30,7 @@ def preprocess(line: List[int]) -> List[int]:
         high_tides.append(high_tide)
     return high_tides
 
-def get_high_tides(line: List[int]) -> List[int]:
+def find_high_tides(line: List[int]) -> List[int]:
     high_tide = 0
     high_tides = []
     for i in line:
@@ -56,5 +55,4 @@ def test_case(data, expected):
 
 if __name__ == '__main__':
     main()
-
 
