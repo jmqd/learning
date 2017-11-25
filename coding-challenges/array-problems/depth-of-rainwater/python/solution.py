@@ -48,7 +48,7 @@ def test() -> None:
     test_case(*simple_depth_case)
     test_case(*nested_depth_case)
 
-def test_case(data, expected):
+def test_case(data: List[int], expected: List[int]) -> None:
     actual = preprocess(data)
     print(actual)
     assert actual == expected
