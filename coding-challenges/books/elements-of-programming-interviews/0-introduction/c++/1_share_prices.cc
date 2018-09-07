@@ -14,8 +14,8 @@
 
 double find_max_profit(std::vector<double> prices)
 {
-    double min_seen = std::numeric_limits<double>::max(),
-           max_profit = std::numeric_limits<double>::min();
+    double min_seen = std::numeric_limits<double>::max();
+    double max_profit = std::numeric_limits<double>::min();
 
     for (double i: prices)
     {
