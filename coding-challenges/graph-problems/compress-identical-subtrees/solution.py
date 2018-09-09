@@ -18,7 +18,6 @@ def compress_identical_subtrees(root_node):
     print("Size after compressing identical subtrees is", dfs_calculate_size(root_node, set()))
 
 def dfs(node, seen_subtrees):
-    print(node.val, id(node))
     if not node.children:
         return str(node.val)
 
