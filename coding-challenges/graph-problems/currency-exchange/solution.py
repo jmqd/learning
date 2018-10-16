@@ -78,7 +78,6 @@ def bfs_exchange_rate(nodes, origin, target):
     seen = set()
 
     while queue:
-        print(queue[-1])
         node, rate = queue.pop()
 
         if node.name in seen:
